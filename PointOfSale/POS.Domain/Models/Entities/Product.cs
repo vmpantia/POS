@@ -12,6 +12,7 @@ namespace POS.Domain.Models.Entities
         public string Name { get; set; }
         [StringLength(255)]
         public string? Description { get; set; }
+        public string? ImagePath { get; set; }
 
         public virtual Category Category { get; set; }
     }
