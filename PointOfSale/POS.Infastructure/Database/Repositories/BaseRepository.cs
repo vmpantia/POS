@@ -19,5 +19,14 @@ namespace POS.Infrastructure.Database.Repositories
         public IQueryable<TEntity> GetByExpression(Expression<Func<TEntity, bool>> expression) =>
              _table.Where(expression)
                    .AsNoTracking();
+
+        public async Task<TEntity?> GetOneByIdAsync<TId>(TId id) =>
+            await _table.FindAsync(id);
+
+        public async Task UpdateAsync(TEntity entity)
+        {
+            _table.Update(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 }

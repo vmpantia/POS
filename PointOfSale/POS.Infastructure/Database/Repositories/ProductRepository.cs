@@ -15,5 +15,11 @@ namespace POS.Infrastructure.Database.Repositories
                                                       data.Category.Status != CommonStatus.Deleted)
                       .Include(tbl => tbl.Category)
                       .ToListAsync();
+
+        public async Task<Product?> GetProductByIdAsync(Guid id) =>
+            await base.GetOneByIdAsync(id);
+
+        public async Task UpdateProductAsync(Product product) =>
+            await base.UpdateAsync(product);
     }
 }

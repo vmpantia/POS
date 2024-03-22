@@ -25,7 +25,7 @@ namespace POS.Core.Queries.Handlers
             var products = await _product.GetAllProductsAsync();
 
             // Check if products is NULL
-            if(products is null) Result<IEnumerable<ProductViewModel>>.Failure(ProductErrors.NULL);
+            if(products is null) return Result<IEnumerable<ProductViewModel>>.Failure(ProductErrors.NULL);
 
             // Convert products to product view models
             var data = _mapper.Map<IEnumerable<ProductViewModel>>(products);

@@ -6,5 +6,7 @@ namespace POS.Domain.Contracts.Repositories
     public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         IQueryable<TEntity> GetByExpression(Expression<Func<TEntity, bool>> expression);
+        Task<TEntity?> GetOneByIdAsync<TId>(TId id);
+        Task UpdateAsync(TEntity entity);
     }
 }
