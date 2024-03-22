@@ -12,7 +12,6 @@ const ProductsTableWithAction = ({  title, data,  columns,  isLoading, onEditAct
         },
         enableRowNumbers: true,
         enableColumnPinning: true,
-        enableStickyHeader: true,
         enableRowActions: true,
         renderRowActionMenuItems: ({ row, table }) => [
             <MRT_ActionMenuItem //or just use a normal MUI MenuItem component
@@ -38,7 +37,6 @@ const ProductsTableWithAction = ({  title, data,  columns,  isLoading, onEditAct
             animation: 'pulse',
             height: 28,
         },
-        muiTableContainerProps: { sx: { maxHeight: '600px' } },
         renderTopToolbarCustomActions: () => (
             <div className='pl-2 py-1 text-xl font-bold'>
                 {title}
@@ -46,11 +44,7 @@ const ProductsTableWithAction = ({  title, data,  columns,  isLoading, onEditAct
         ),
     });
 
-    return (
-        <div className='p-7'>
-            <MaterialReactTable table={table}/>
-        </div>
-    )
+    return <MaterialReactTable table={table}/>
 }
 
 export default ProductsTableWithAction

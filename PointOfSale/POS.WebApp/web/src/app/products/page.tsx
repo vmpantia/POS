@@ -1,10 +1,14 @@
 'use client'
 import { DeleteProductById, GetAllProducts } from '@/api/ProductApis';
+import CustomBreadcrumbs from '@/components/CustomBreadcrumbs';
+import CustomCardCounts from '@/components/CustomCardCounts';
 import { ProductColumns } from '@/components/table/CustomTableColumns';
 import ProductsTableWithAction from '@/components/table/ProductsTableWithAction';
+import { CommonStatus } from '@/models/enums/CommonStatus';
 import { ProductViewModel } from '@/models/interfaces/product/ProductViewModel'
+import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
+import { CustomCardCount } from '@/models/props/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
-import { Modal } from 'antd';
 import React, { useEffect, useState } from 'react'
 
 const page = () => {
@@ -12,12 +16,21 @@ const page = () => {
     // Hooks
     const [products, setProducts] = useState<ProductViewModel[]>([]);
     const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
-    const [isModalLoading, setIsModalLoading] = useState<boolean>(false);
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [productId, setProductId] = useState<string | null>(null);
- 
+    const [isRequiresReload, setIsRequiresReload] = useState<boolean>(false);
+
+    // Component Configurations
+    const productCards : CustomCardCount[] = [
+        { title: 'All', count: isTableLoading ? '-' : products.length },
+        { title: 'Active', count: isTableLoading ? '-' : products.filter(prod => prod.status === CommonStatus.Active).length },
+        { title: 'Inactive', count: isTableLoading ? '-' : products.filter(prod => prod.status === CommonStatus.Inactive).length },
+    ]
+    const productPages : CustomBreadcrumbsPage[] = [
+        { link: 'http://localhost:3000/', name: 'Home' },
+        { link: null, name: 'Products' },
+    ] 
+
     // Functions
-    const getAllProductsFromApi = () => {
+    const fetchAllProductsFromApi = () => {
         setIsTableLoading(true);
         GetAllProducts()
         .then((res:Result<ProductViewModel[]>) => {
@@ -33,62 +46,46 @@ const page = () => {
             setIsTableLoading(false);
         });
     }
-
     const handleTableEditAction = (id:string) => {
         console.log(id);
     }
-
     const handleTableDeleteAction = (id:string) => {
-        setShowModal(true);
-        setProductId(id);
-    }
-
-    const handleModalCancelAction = () => {
-        setShowModal(false);
-        setProductId(null);
-    }
-
-    const handleModalOkAction = () => {
-        // Check if productId is NULL 
-        if(productId === null) return;
-
-        setIsModalLoading(true);
-        DeleteProductById(productId)
+        DeleteProductById(id)
         .then((res:Result<string>) => {
-            if(res.isSuccess)
+            if(res.isSuccess) {
+                setIsRequiresReload(true);
                 console.log(res.data!);
+            }
             else
                 console.log(`${res.error!.code} | ${res.error!.type} | ${res.error!.description}`);
         })
         .catch((err:any) => {
             console.log(err);
-        })
-        .finally(() => {
-            setIsModalLoading(false);
-            handleModalCancelAction();
         });
     }
     
     useEffect(() => {
-        getAllProductsFromApi();
+        fetchAllProductsFromApi();
     }, [])
 
+    useEffect(() => {
+        if(isRequiresReload) {
+            fetchAllProductsFromApi();
+            setIsRequiresReload(false);    
+        }
+    }, [isRequiresReload])
+
     return (
-        <>
+        <div className='p-10'>
+            <CustomBreadcrumbs pages={productPages} />
+            <CustomCardCounts cards={productCards} isLoading={isTableLoading} />
             <ProductsTableWithAction title='Products'
-                                            data={products}
-                                            columns={ProductColumns}
-                                            isLoading={isTableLoading}
-                                            onEditActionClicked={handleTableEditAction}
-                                            onDeleteActionClicked={handleTableDeleteAction} />
-            <Modal title="Title"
-                    open={showModal}
-                    onOk={handleModalOkAction}
-                    confirmLoading={isModalLoading}
-                    onCancel={handleModalCancelAction}>
-                <p>Test Test Modal</p>
-            </Modal>
-        </>
+                                     data={products}
+                                     columns={ProductColumns}
+                                     isLoading={isTableLoading}
+                                     onEditActionClicked={handleTableEditAction}
+                                     onDeleteActionClicked={handleTableDeleteAction} />
+        </div>
     );
 }
 
