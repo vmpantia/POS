@@ -2,8 +2,9 @@
 import { DeleteProductById, GetAllProducts } from '@/api/ProductApis';
 import CustomBreadcrumbs from '@/components/CustomBreadcrumbs';
 import CustomCardCounts from '@/components/CustomCardCounts';
-import { ProductColumns } from '@/components/table/CustomTableColumns';
-import ProductsTableWithAction from '@/components/table/ProductsTableWithAction';
+import ProductFormModal from '@/components/modals/ProductFormModal';
+import { ProductColumns } from '@/components/tables/CustomTableColumns';
+import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
 import { CommonStatus } from '@/models/enums/CommonStatus';
 import { ProductViewModel } from '@/models/interfaces/product/ProductViewModel'
 import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
@@ -77,6 +78,7 @@ const page = () => {
 
     return (
         <div className='p-10'>
+            <ProductFormModal />
             <CustomBreadcrumbs pages={productPages} />
             <CustomCardCounts cards={productCards} isLoading={isTableLoading} />
             <ProductsTableWithAction title='Products'
