@@ -3,17 +3,10 @@ import React from 'react'
 
 const CustomModal = ({ title, isOpen, onClose, children } : CustomModalProps) => {
     if(!isOpen) return null;
-
-    const handleClose = (e:any) => {
-        if(e.target.id === 'wrapper') onClose();
-    }
-
     return (
         <>
-            <div className='fixed inset-0 z-50 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center'
-                 id='wrapper'
-                 onClick={handleClose}>
-                <div className='w-[600px] bg-white p-8 rounded'>
+            <div className='fixed inset-0 z-[1300] bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center'>
+                <div className='w-[600px] bg-white p-8 rounded drop-shadow-xl'>
                     <div className="flex items-center justify-between pb-3 mb-5 border-b">
                         <h3 className="text-xl font-semibold">
                             {title}
@@ -26,7 +19,9 @@ const CustomModal = ({ title, isOpen, onClose, children } : CustomModalProps) =>
                             </svg>
                         </button>
                     </div>
-                    {children}
+                    <div className=' max-h-[600px] overflow-auto' >
+                        {children}
+                    </div>
                 </div>
             </div>
         </>

@@ -3,6 +3,7 @@ using MediatR;
 using POS.Core.Models.ViewModels.Product;
 using POS.Core.Queries.Models.Product;
 using POS.Domain.Contracts.Repositories;
+using POS.Domain.Models.Enums;
 using POS.Domain.Response;
 using POS.Domain.Response.Errors;
 
@@ -36,7 +37,7 @@ namespace POS.Core.Queries.Handlers
         public async Task<Result<ProductViewModel>> Handle(GetProductById request, CancellationToken cancellationToken)
         {
             // Get product by id in the database
-            var product = await _product.GetProductByIdAsync(request.Id);
+            var product = await _product.GetProductByExpressionAsync(data => data.Id == request.Id);
 
             // Check if products is NULL
             if (product is null) return Result<ProductViewModel>.Failure(ProductErrors.NotFound(request.Id));

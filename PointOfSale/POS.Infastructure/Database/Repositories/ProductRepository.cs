@@ -13,7 +13,7 @@ namespace POS.Infrastructure.Database.Repositories
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync() =>
             await base.GetByExpression(data => data.Status != CommonStatus.Deleted &&
-                                                      data.Category.Status != CommonStatus.Deleted)
+                                               data.Category.Status != CommonStatus.Deleted)
                       .Include(tbl => tbl.Category)
                       .ToListAsync();
 
@@ -21,7 +21,9 @@ namespace POS.Infrastructure.Database.Repositories
             await base.GetOneByIdAsync(id);
 
         public async Task<Product?> GetProductByExpressionAsync(Expression<Func<Product, bool>> expression) =>
-            await base.GetOneByExpressionAsync(expression);
+            await base.GetByExpression(expression)
+                        .Include(tbl => tbl.Category)
+                        .FirstOrDefaultAsync();
 
         public async Task UpdateProductAsync(Product product) =>
             await base.UpdateAsync(product);
