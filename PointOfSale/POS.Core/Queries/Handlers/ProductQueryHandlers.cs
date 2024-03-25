@@ -9,7 +9,8 @@ using POS.Domain.Response.Errors;
 namespace POS.Core.Queries.Handlers
 {
     public class ProductQueryHandlers :
-        IRequestHandler<GetAllProducts, Result<IEnumerable<ProductViewModel>>>
+        IRequestHandler<GetAllProducts, Result<IEnumerable<ProductViewModel>>>,
+        IRequestHandler<GetProductById, Result<ProductViewModel>>
     {
         private readonly IProductRepository _product;
         private readonly IMapper _mapper;
@@ -30,6 +31,19 @@ namespace POS.Core.Queries.Handlers
             // Convert products to product view models
             var data = _mapper.Map<IEnumerable<ProductViewModel>>(products);
             return Result<IEnumerable<ProductViewModel>>.Success(data);
+        }
+
+        public async Task<Result<ProductViewModel>> Handle(GetProductById request, CancellationToken cancellationToken)
+        {
+            // Get product by id in the database
+            var product = await _product.GetProductByIdAsync(request.Id);
+
+            // Check if products is NULL
+            if (product is null) return Result<ProductViewModel>.Failure(ProductErrors.NotFound(request.Id));
+
+            // Convert product to product view model
+            var data = _mapper.Map<ProductViewModel>(product);
+            return Result<ProductViewModel>.Success(data);
         }
     }
 }

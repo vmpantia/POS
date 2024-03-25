@@ -3,6 +3,7 @@ using POS.Domain.Contracts.Repositories;
 using POS.Domain.Models.Entities;
 using POS.Domain.Models.Enums;
 using POS.Infrastructure.Database.Contexts;
+using System.Linq.Expressions;
 
 namespace POS.Infrastructure.Database.Repositories
 {
@@ -18,6 +19,9 @@ namespace POS.Infrastructure.Database.Repositories
 
         public async Task<Product?> GetProductByIdAsync(Guid id) =>
             await base.GetOneByIdAsync(id);
+
+        public async Task<Product?> GetProductByExpressionAsync(Expression<Func<Product, bool>> expression) =>
+            await base.GetOneByExpressionAsync(expression);
 
         public async Task UpdateProductAsync(Product product) =>
             await base.UpdateAsync(product);

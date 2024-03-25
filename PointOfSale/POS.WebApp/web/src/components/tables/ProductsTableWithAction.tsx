@@ -1,4 +1,4 @@
-import { ProductTableProps } from '@/models/props/ProductTableProps'
+import { ProductTableProps } from '@/models/props/tables/ProductTableProps'
 import { Delete, Edit } from '@mui/icons-material';
 import { MRT_ActionMenuItem, MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React from 'react'

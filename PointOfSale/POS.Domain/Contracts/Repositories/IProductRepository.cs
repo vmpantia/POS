@@ -1,4 +1,5 @@
 ﻿using POS.Domain.Models.Entities;
+using System.Linq.Expressions;
 
 namespace POS.Domain.Contracts.Repositories
 {
@@ -6,6 +7,7 @@ namespace POS.Domain.Contracts.Repositories
     {
         Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<Product?> GetProductByIdAsync(Guid id);
+        Task<Product?> GetProductByExpressionAsync(Expression<Func<Product, bool>> expression);
         Task UpdateProductAsync(Product product);
     }
 }

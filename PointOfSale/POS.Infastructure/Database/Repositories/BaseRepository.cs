@@ -23,6 +23,9 @@ namespace POS.Infrastructure.Database.Repositories
         public async Task<TEntity?> GetOneByIdAsync<TId>(TId id) =>
             await _table.FindAsync(id);
 
+        public async Task<TEntity?> GetOneByExpressionAsync(Expression<Func<TEntity, bool>> expression) =>
+             await _table.FirstOrDefaultAsync(expression);
+
         public async Task UpdateAsync(TEntity entity)
         {
             _table.Update(entity);
