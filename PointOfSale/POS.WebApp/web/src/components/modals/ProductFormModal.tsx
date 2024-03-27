@@ -4,8 +4,10 @@ import { ProductFormModalProps } from '@/models/props/modals/ProductFormModalPro
 import CustomInputText from '../inputs/CustomInputText'
 import CustomActionButton from '../actions/CustomActionButton'
 import { ButtonType } from '@/models/enums/ButtonType'
+import CustomInputTextArea from '../inputs/CustomInputTextArea'
+import CustomSelectionBox from '../inputs/CustomSelectionBox'
 
-const ProductFormModal = ({product, setProduct, isOpen, onModalCloseHandler} : ProductFormModalProps) => {
+const ProductFormModal = ({product, setProduct, isOpen, onModalCloseHandler, categories} : ProductFormModalProps) => {
 
     // Functions
     const onProductValueChange = (input:any) => {
@@ -13,6 +15,12 @@ const ProductFormModal = ({product, setProduct, isOpen, onModalCloseHandler} : P
         let value = input.target.value;
         setProduct((data:any) => { return {...data, [property]: value} });
     }
+    const onCategoryValueChange = (input:any) => {
+        let value = input.target.value;
+        let selectedValue = categories.filter(data => data.id == value)[0];
+        setProduct((data:any) => { return {...data, category: selectedValue} });
+    }
+
     const onSaveActionClick = () => {
         console.log(product);
     }
@@ -21,8 +29,8 @@ const ProductFormModal = ({product, setProduct, isOpen, onModalCloseHandler} : P
         <CustomModal title={product === null ? "New Product" : "Edit Product"} isOpen={isOpen} onClose={onModalCloseHandler}>
             <CustomInputText id='name' label='Name' value={product?.name} placeholder='Type Product Name' isRequired={true} onValueChangedHandler={onProductValueChange} />
             <CustomInputText id='code' label='Code' value={product?.code} placeholder='Type Product Code' isRequired={true} onValueChangedHandler={onProductValueChange} />
-            <CustomInputText id='category' label='Category' value={product?.category?.name} placeholder='Type Product Category' isRequired={true} onValueChangedHandler={onProductValueChange} />
-            <CustomInputText id='description' label='Description' value={product?.description} placeholder='Type Product Description' isRequired={false} onValueChangedHandler={onProductValueChange}  />
+            <CustomSelectionBox id='category' label='Category' data={categories} value={product?.category?.id} isRequired={true} onSelectedValueChangedHandler={onCategoryValueChange} />
+            <CustomInputTextArea id='description' label='Description' value={product?.description} placeholder='Type Product Description' isRequired={false} onValueChangedHandler={onProductValueChange}  />
             <div className='flex gap-4 columns-2 w-full p-2'>
                 <CustomActionButton title='Save'
                                     type={ButtonType.Primary}

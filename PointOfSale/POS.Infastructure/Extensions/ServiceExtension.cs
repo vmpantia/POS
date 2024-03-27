@@ -13,6 +13,7 @@ namespace POS.Infrastructure.Extensions
         {
             services.AddDbContext<POSDbContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("MigrationDb")));
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
         }
     }
 }

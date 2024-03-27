@@ -1,4 +1,4 @@
-export interface InputTextProps {
+export interface CustomInputTextProps {
     id:string,
     label:string,
     value?:string | undefined,

@@ -1,4 +1,5 @@
 'use client'
+import { GetAllCategoryLites } from '@/api/CategoryApis';
 import { DeleteProductById, GetAllProducts, GetProductById } from '@/api/ProductApis';
 import CustomBreadcrumbs from '@/components/CustomBreadcrumbs';
 import CustomCardCounts from '@/components/CustomCardCounts';
@@ -6,6 +7,7 @@ import ProductFormModal from '@/components/modals/ProductFormModal';
 import { ProductColumns } from '@/components/tables/CustomTableColumns';
 import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
 import { CommonStatus } from '@/models/enums/CommonStatus';
+import { CategoryLiteViewModel } from '@/models/interfaces/category/CategoryLiteViewModel';
 import { ProductViewModel } from '@/models/interfaces/product/ProductViewModel'
 import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
 import { CustomCardCount } from '@/models/props/CustomCardCountProps';
@@ -17,6 +19,7 @@ const page = () => {
     // Hooks
     const [products, setProducts] = useState<ProductViewModel[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<ProductViewModel | null>(null);
+    const [categories, setCategories] = useState<CategoryLiteViewModel[]>([]);
     const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
     const [isRequiresReload, setIsRequiresReload] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -61,6 +64,18 @@ const page = () => {
             console.log(err);
         });
     }
+    const fetchAllCategoryLitesFromApi = () => {
+        GetAllCategoryLites()
+        .then((res:Result<CategoryLiteViewModel[]>) => {
+            if(res.isSuccess)
+                setCategories(res.data!);
+            else
+                console.log(`${res.error!.code} | ${res.error!.type} | ${res.error!.description}`);
+        })
+        .catch((err:any) => {
+            console.log(err);
+        });
+    }
     const onEditActionClick = (id:string) => {
         fetchProductByIdFromApi(id);
         setIsModalOpen(true);
@@ -87,11 +102,13 @@ const page = () => {
     // Effects
     useEffect(() => {
         fetchAllProductsFromApi();
+        fetchAllCategoryLitesFromApi();
     }, [])
 
     useEffect(() => {
         if(isRequiresReload) {
             fetchAllProductsFromApi();
+            fetchAllCategoryLitesFromApi();
             setIsRequiresReload(false);    
         }
     }, [isRequiresReload])
@@ -112,7 +129,8 @@ const page = () => {
                               setProduct={setSelectedProduct}
                               isOpen={isModalOpen} 
                               onModalCloseHandler={onModalClose}
-                              setIsRequiresReload={setIsRequiresReload} />
+                              setIsRequiresReload={setIsRequiresReload}
+                              categories={categories} />
         </>
     );
 }
