@@ -61,11 +61,11 @@ const page = () => {
             console.log(err);
         });
     }
-    const handleTableEditAction = (id:string) => {
+    const onEditActionClick = (id:string) => {
         fetchProductByIdFromApi(id);
         setIsModalOpen(true);
     }
-    const handleTableDeleteAction = (id:string) => {
+    const onDeleteActionClick = (id:string) => {
         DeleteProductById(id)
         .then((res:Result<string>) => {
             if(res.isSuccess) {
@@ -79,7 +79,12 @@ const page = () => {
             console.log(err);
         });
     }
+    const onModalClose = () => {
+        setSelectedProduct(null);
+        setIsModalOpen(false); 
+    }
     
+    // Effects
     useEffect(() => {
         fetchAllProductsFromApi();
     }, [])
@@ -100,13 +105,13 @@ const page = () => {
                                          data={products}
                                          columns={ProductColumns}
                                          isLoading={isTableLoading}
-                                         onEditActionClicked={handleTableEditAction}
-                                         onDeleteActionClicked={handleTableDeleteAction} />
+                                         onEditActionClickedHandler={onEditActionClick}
+                                         onDeleteActionClickedHandler={onDeleteActionClick} />
             </div>
             <ProductFormModal product={selectedProduct}
                               setProduct={setSelectedProduct}
                               isOpen={isModalOpen} 
-                              onClose={() => setIsModalOpen(false)} />
+                              onModalCloseHandler={onModalClose} />
         </>
     );
 }

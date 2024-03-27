@@ -2,8 +2,12 @@ import { InputTextProps } from '@/models/interfaces/inputs/InputTextProps'
 import React, { useState } from 'react'
 
 const CustomInputText = ({id, label, value, placeholder, isRequired, onValueChangedHandler}: InputTextProps) => {
-    const [error, setError] = useState<string | null>(null)
-    const onValueChanged = (input:any) => {
+
+    // Hooks
+    const [error, setError] = useState<string | null>(null);
+
+    // Functions
+    const onValueChange = (input:any) => {
         let value = input.target.value;
         setError(isRequired && value === null || value === "" ? "This field is required." : null);
         onValueChangedHandler(input);
@@ -23,7 +27,7 @@ const CustomInputText = ({id, label, value, placeholder, isRequired, onValueChan
                                           'focus:ring-blue-500 focus:border-blue-500'}`}
                    placeholder={placeholder}
                    value={value}
-                   onChange={onValueChanged} />
+                   onChange={onValueChange} />
             {isRequired && error ? <div className='mt-1 text-sm text-red-500'>{error}</div> : <></>}
         </div>
     )

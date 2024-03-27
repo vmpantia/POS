@@ -3,6 +3,6 @@ export interface ProductTableProps {
     data:any[],
     columns:any[],
     isLoading:boolean,
-    onEditActionClicked: (id:string) => any,
-    onDeleteActionClicked: (id:string) => any,
+    onEditActionClickedHandler: (id:string) => any,
+    onDeleteActionClickedHandler: (id:string) => any,
 }

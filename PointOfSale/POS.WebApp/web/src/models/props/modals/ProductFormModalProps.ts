@@ -4,5 +4,5 @@ export interface ProductFormModalProps {
     product?: any,
     setProduct: (value:any) => any,
     isOpen:boolean,
-    onClose: () => any
+    onModalCloseHandler: () => any
 }
