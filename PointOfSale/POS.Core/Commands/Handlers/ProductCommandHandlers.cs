@@ -7,7 +7,8 @@ using POS.Domain.Response.Errors;
 namespace POS.Core.Commands.Handlers
 {
     public class ProductCommandHandlers :
-        IRequestHandler<DeleteProductByIdCommand, Result<string>>
+        IRequestHandler<DeleteProductByIdCommand, Result<string>>,
+        IRequestHandler<EditProductByIdCommand, Result<string>>
     {
         private readonly IProductRepository _product;
         public ProductCommandHandlers(IProductRepository product) => 
@@ -28,6 +29,25 @@ namespace POS.Core.Commands.Handlers
             await _product.UpdateProductAsync(product);
 
             return Result<string>.Success("Product deleted succesfully in the database.");
+        }
+
+        public async Task<Result<string>> Handle(EditProductByIdCommand request, CancellationToken cancellationToken)
+        {
+            // Get product by id in the database
+            var product = await _product.GetProductByIdAsync(request.Id);
+
+            // Check if product exist
+            if (product is null) return Result<string>.Failure(ProductErrors.NotFound(request.Id));
+
+            // Update product
+            product.CategoryId = request.CategoryId;
+            product.Name = request.Name;
+            product.Description = request.Description;
+            product.UpdatedBy = request.Requestor;
+            product.UpdatedAt = DateTime.Now;
+            await _product.UpdateProductAsync(product);
+
+            return Result<string>.Success("Product updated succesfully in the database.");
         }
     }
 }
