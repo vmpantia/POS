@@ -14,12 +14,11 @@ import { ProductViewModel } from '@/models/interfaces/viewmodels/product/Product
 import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
 import { CustomCardCount } from '@/models/props/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ConvertErrorToString } from '../../utils/ConversionHelper';
 
 const page = () => {
     
-
     // Hooks
     const [products, setProducts] = useState<ProductViewModel[]>([]);
     const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
@@ -46,15 +45,10 @@ const page = () => {
         setIsTableLoading(true);
         GetAllProducts()
         .then((res:Result<ProductViewModel[]>) => {
-            if(res.isSuccess) {
-                setProducts(res.data!);
-            }
-            else {
-                ShowNotification('error', ConvertErrorToString(res.error!));
-            }
+            if(res.isSuccess) setProducts(res.data!);
         })
-        .catch((err:any) => {
-            ShowNotification('error', err);
+        .catch((res:any) => {
+            ShowNotification('error', ConvertErrorToString(res.response.data.error));
         })
         .finally(() => {
             setIsTableLoading(false);
@@ -63,29 +57,19 @@ const page = () => {
     const fetchProductByIdFromApi = (id:string) => {
         GetProductById(id!)
         .then((res:Result<ProductViewModel>) => {
-            if(res.isSuccess) {
-                setProduct(res.data!);
-            }
-            else {
-                ShowNotification('error', ConvertErrorToString(res.error!));
-            }
+            if(res.isSuccess) setProduct(res.data!);
         })
-        .catch((err:any) => {
-            ShowNotification('error', err);
+        .catch((res:any) => {
+            ShowNotification('error', ConvertErrorToString(res.response.data.error));
         });
     }
     const fetchAllCategoryLitesFromApi = () => {
         GetAllCategoryLites()
         .then((res:Result<CategoryLiteViewModel[]>) => {
-            if(res.isSuccess) {
-                setCategories(res.data!);
-            }
-            else {
-                ShowNotification('error', ConvertErrorToString(res.error!));
-            }
+            if(res.isSuccess) setCategories(res.data!);
         })
-        .catch((err:any) => {
-            ShowNotification('error', err);
+        .catch((res:any) => {
+            ShowNotification('error', ConvertErrorToString(res.response.data.error));
         });
     }
     const onEditActionClick = (id:string) => {
@@ -100,12 +84,9 @@ const page = () => {
                 ShowNotification('success', res.data!);
                 setIsRequiresReload(true);
             }
-            else {
-                ShowNotification('error', ConvertErrorToString(res.error!));
-            }
         })
-        .catch((err:any) => {
-            ShowNotification('error', err);
+        .catch((res:any) => {
+            ShowNotification('error', ConvertErrorToString(res.response.data.error));
         });
     }
     const onModalClose = () => {

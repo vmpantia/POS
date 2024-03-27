@@ -13,15 +13,15 @@ const useCustomNotification = (placement:NotificationArgsProps['placement'], dur
                 icon = <CheckCircleFilled style={{ color: 'green' }} />;
                 break;
             case 'info':
-                message = 'Success';
+                message = 'Information';
                 icon = <InfoCircleFilled style={{ color: 'blue' }} />;
                 break;
             case 'error':
-                message = 'Success';
+                message = 'Error';
                 icon = <CloseCircleFilled style={{ color: 'red' }} />;
                 break;
             case 'warning':
-                message = 'Success';
+                message = 'Warning';
                 icon = <WarningFilled style={{ color: 'organge' }} />;
                 break;
         }
@@ -30,7 +30,7 @@ const useCustomNotification = (placement:NotificationArgsProps['placement'], dur
             description: description,
             placement: placement,
             duration: duration,
-            icon: icon
+            icon: icon,
         });
     }
     return {
