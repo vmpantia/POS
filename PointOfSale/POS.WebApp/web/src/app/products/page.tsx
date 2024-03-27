@@ -3,6 +3,7 @@ import { GetAllCategoryLites } from '@/api/CategoryApis';
 import { DeleteProductById, GetAllProducts, GetProductById } from '@/api/ProductApis';
 import CustomBreadcrumbs from '@/components/CustomBreadcrumbs';
 import CustomCardCounts from '@/components/CustomCardCounts';
+import useCustomNotification from '@/components/hooks/useCustomNotification';
 import ProductFormModal from '@/components/modals/ProductFormModal';
 import { ProductColumns } from '@/components/tables/CustomTableColumns';
 import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
@@ -13,9 +14,11 @@ import { ProductViewModel } from '@/models/interfaces/viewmodels/product/Product
 import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
 import { CustomCardCount } from '@/models/props/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { ConvertErrorToString } from '../utils/ConversionHelper';
 
 const page = () => {
+    
 
     // Hooks
     const [products, setProducts] = useState<ProductViewModel[]>([]);
@@ -25,6 +28,7 @@ const page = () => {
     const [categories, setCategories] = useState<CategoryLiteViewModel[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isNew, setIsNew] = useState<boolean>(true);
+    const { notification, ShowNotification } = useCustomNotification('bottomLeft');
 
     // Component Configurations
     const productCards : CustomCardCount[] = [
@@ -42,11 +46,15 @@ const page = () => {
         setIsTableLoading(true);
         GetAllProducts()
         .then((res:Result<ProductViewModel[]>) => {
-            if(res.isSuccess)
+            if(res.isSuccess) {
                 setProducts(res.data!);
+            }
+            else {
+                ShowNotification('error', ConvertErrorToString(res.error!));
+            }
         })
         .catch((err:any) => {
-            console.log(err);
+            ShowNotification('error', err);
         })
         .finally(() => {
             setIsTableLoading(false);
@@ -55,15 +63,29 @@ const page = () => {
     const fetchProductByIdFromApi = (id:string) => {
         GetProductById(id!)
         .then((res:Result<ProductViewModel>) => {
-            if(res.isSuccess)
+            if(res.isSuccess) {
                 setProduct(res.data!);
+            }
+            else {
+                ShowNotification('error', ConvertErrorToString(res.error!));
+            }
+        })
+        .catch((err:any) => {
+            ShowNotification('error', err);
         });
     }
     const fetchAllCategoryLitesFromApi = () => {
         GetAllCategoryLites()
         .then((res:Result<CategoryLiteViewModel[]>) => {
-            if(res.isSuccess)
+            if(res.isSuccess) {
                 setCategories(res.data!);
+            }
+            else {
+                ShowNotification('error', ConvertErrorToString(res.error!));
+            }
+        })
+        .catch((err:any) => {
+            ShowNotification('error', err);
         });
     }
     const onEditActionClick = (id:string) => {
@@ -74,8 +96,16 @@ const page = () => {
     const onDeleteActionClick = (id:string) => {
         DeleteProductById(id)
         .then((res:Result<string>) => {
-            if(res.isSuccess)
+            if(res.isSuccess) {
+                ShowNotification('success', res.data!);
                 setIsRequiresReload(true);
+            }
+            else {
+                ShowNotification('error', ConvertErrorToString(res.error!));
+            }
+        })
+        .catch((err:any) => {
+            ShowNotification('error', err);
         });
     }
     const onModalClose = () => {
@@ -116,6 +146,7 @@ const page = () => {
                               onModalCloseHandler={onModalClose}
                               setIsRequiresReload={setIsRequiresReload}
                               categories={categories} />
+            {notification}
         </>
     );
 }
