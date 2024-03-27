@@ -4,5 +4,5 @@ using POS.Domain.Response;
 
 namespace POS.Core.Queries.Models.Category
 {
-    public class GetAllCategoryLites : IRequest<Result<IEnumerable<CategoryLiteViewModel>>> { }
+    public class GetAllCategoryLitesQuery : IRequest<Result<IEnumerable<CategoryLiteViewModel>>> { }
 }

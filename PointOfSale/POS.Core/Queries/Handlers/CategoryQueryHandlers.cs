@@ -9,7 +9,7 @@ using POS.Domain.Response.Errors;
 namespace POS.Core.Queries.Handlers
 {
     public class CategoryQueryHandlers :
-        IRequestHandler<GetAllCategoryLites, Result<IEnumerable<CategoryLiteViewModel>>>
+        IRequestHandler<GetAllCategoryLitesQuery, Result<IEnumerable<CategoryLiteViewModel>>>
     {
         private readonly ICategoryRepository _category;
         private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace POS.Core.Queries.Handlers
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<CategoryLiteViewModel>>> Handle(GetAllCategoryLites request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<CategoryLiteViewModel>>> Handle(GetAllCategoryLitesQuery request, CancellationToken cancellationToken)
         {
             // Get all categories stored in the database
             var categories = await _category.GetAllCategoriesAsync();

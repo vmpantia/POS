@@ -7,13 +7,13 @@ using POS.Domain.Response.Errors;
 namespace POS.Core.Commands.Handlers
 {
     public class ProductCommandHandlers :
-        IRequestHandler<DeleteProductById, Result<string>>
+        IRequestHandler<DeleteProductByIdCommand, Result<string>>
     {
         private readonly IProductRepository _product;
         public ProductCommandHandlers(IProductRepository product) => 
             _product = product;
 
-        public async Task<Result<string>> Handle(DeleteProductById request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(DeleteProductByIdCommand request, CancellationToken cancellationToken)
         {
             // Get product by id in the database
             var product = await _product.GetProductByIdAsync(request.Id);

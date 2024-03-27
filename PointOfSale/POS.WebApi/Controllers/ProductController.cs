@@ -16,14 +16,14 @@ namespace POS.WebApi.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAllProductsAsync() =>
-            await HandleRequestAsync<GetAllProducts, IEnumerable<ProductViewModel>>(new GetAllProducts());
+            await HandleRequestAsync<GetAllProductsQuery, IEnumerable<ProductViewModel>>(new GetAllProductsQuery());
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductByIdAsync(Guid id) =>
-            await HandleRequestAsync<GetProductById, ProductViewModel>(new GetProductById(id));
+            await HandleRequestAsync<GetProductByIdQuery, ProductViewModel>(new GetProductByIdQuery(id));
 
         [HttpDelete]
         public async Task<IActionResult> DeleteProductAsync([FromBody] DeleteProductDto request) =>
-            await HandleRequestAsync<DeleteProductById, string>(new DeleteProductById(request.Id));
+            await HandleRequestAsync<DeleteProductByIdCommand, string>(new DeleteProductByIdCommand(request.Id));
     }
 }

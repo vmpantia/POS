@@ -4,5 +4,5 @@ using POS.Domain.Response;
 
 namespace POS.Core.Queries.Models.Product
 {
-    public class GetAllProducts : IRequest<Result<IEnumerable<ProductViewModel>>> { }
+    public record GetProductByIdQuery(Guid Id) : IRequest<Result<ProductViewModel>> { }
 }

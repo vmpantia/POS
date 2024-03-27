@@ -14,6 +14,6 @@ namespace POS.WebApi.Controllers
 
         [HttpGet("lites")]
         public async Task<IActionResult> GetAllCategoryLitesAsync() =>
-            await HandleRequestAsync<GetAllCategoryLites, IEnumerable<CategoryLiteViewModel>>(new GetAllCategoryLites());
+            await HandleRequestAsync<GetAllCategoryLitesQuery, IEnumerable<CategoryLiteViewModel>>(new GetAllCategoryLitesQuery());
     }
 }

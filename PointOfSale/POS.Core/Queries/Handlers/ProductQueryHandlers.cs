@@ -10,8 +10,8 @@ using POS.Domain.Response.Errors;
 namespace POS.Core.Queries.Handlers
 {
     public class ProductQueryHandlers :
-        IRequestHandler<GetAllProducts, Result<IEnumerable<ProductViewModel>>>,
-        IRequestHandler<GetProductById, Result<ProductViewModel>>
+        IRequestHandler<GetAllProductsQuery, Result<IEnumerable<ProductViewModel>>>,
+        IRequestHandler<GetProductByIdQuery, Result<ProductViewModel>>
     {
         private readonly IProductRepository _product;
         private readonly IMapper _mapper;
@@ -21,7 +21,7 @@ namespace POS.Core.Queries.Handlers
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<ProductViewModel>>> Handle(GetAllProducts request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<ProductViewModel>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             // Get all products stored in the database
             var products = await _product.GetAllProductsAsync();
@@ -34,7 +34,7 @@ namespace POS.Core.Queries.Handlers
             return Result<IEnumerable<ProductViewModel>>.Success(data);
         }
 
-        public async Task<Result<ProductViewModel>> Handle(GetProductById request, CancellationToken cancellationToken)
+        public async Task<Result<ProductViewModel>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
             // Get product by id in the database
             var product = await _product.GetProductByExpressionAsync(data => data.Id == request.Id);
