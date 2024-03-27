@@ -13,19 +13,19 @@ const ProductsTableWithAction = ({  title, data,  columns,  isLoading, onEditAct
         enableRowNumbers: true,
         enableColumnPinning: true,
         enableRowActions: true,
-        renderRowActionMenuItems: ({ row, table }) => [
+        renderRowActionMenuItems: ({ closeMenu, row, table }) => [
             <MRT_ActionMenuItem //or just use a normal MUI MenuItem component
                     icon={<Edit />}
                     key="edit"
                     label="Edit"
-                    onClick={() => onEditActionClicked(row.original['id'])}
+                    onClick={() => { onEditActionClicked(row.original['id']); closeMenu(); }}
                     table={table}
             />,
             <MRT_ActionMenuItem
                 icon={<Delete />}
                 key="delete"
                 label="Delete"
-                onClick={() => onDeleteActionClicked(row.original['id'])}
+                onClick={() => { onDeleteActionClicked(row.original['id']); closeMenu(); }}
                 table={table}
             />,
         ],

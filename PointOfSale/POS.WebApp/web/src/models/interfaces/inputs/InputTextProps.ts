@@ -3,5 +3,6 @@ export interface InputTextProps {
     label:string,
     value?:string | undefined,
     placeholder:string,
-    isRequired:boolean
+    isRequired:boolean,
+    onValueChangedHandler: (input:any) => any,
 }

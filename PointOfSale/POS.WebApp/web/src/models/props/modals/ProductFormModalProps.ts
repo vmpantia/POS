@@ -1,7 +1,8 @@
 import { ProductViewModel } from "@/models/interfaces/product/ProductViewModel";
 
 export interface ProductFormModalProps {
-    product?: ProductViewModel | null,
+    product?: any,
+    setProduct: (value:any) => any,
     isOpen:boolean,
     onClose: () => any
 }

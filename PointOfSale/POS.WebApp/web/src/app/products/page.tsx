@@ -20,7 +20,6 @@ const page = () => {
     const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
     const [isRequiresReload, setIsRequiresReload] = useState<boolean>(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
     // Component Configurations
     const productCards : CustomCardCount[] = [
@@ -105,6 +104,7 @@ const page = () => {
                                          onDeleteActionClicked={handleTableDeleteAction} />
             </div>
             <ProductFormModal product={selectedProduct}
+                              setProduct={setSelectedProduct}
                               isOpen={isModalOpen} 
                               onClose={() => setIsModalOpen(false)} />
         </>
