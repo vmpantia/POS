@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using POS.Core.Commands.Models.Product;
 using POS.Domain.Contracts.Repositories;
+using POS.Domain.Models.Enums;
 using POS.Domain.Response;
 using POS.Domain.Response.Errors;
 
@@ -11,8 +12,12 @@ namespace POS.Core.Commands.Handlers
         IRequestHandler<EditProductByIdCommand, Result<string>>
     {
         private readonly IProductRepository _product;
-        public ProductCommandHandlers(IProductRepository product) => 
+        private readonly ICategoryRepository _category;
+        public ProductCommandHandlers(IProductRepository product, ICategoryRepository category)
+        {
             _product = product;
+            _category = category;
+        }
 
         public async Task<Result<string>> Handle(DeleteProductByIdCommand request, CancellationToken cancellationToken)
         {
@@ -38,6 +43,11 @@ namespace POS.Core.Commands.Handlers
 
             // Check if product exist
             if (product is null) return Result<string>.Failure(ProductErrors.NotFound(request.Id));
+
+            // Check if new category id exist
+            if(!await _category.IsCategoryExistAsync(data => data.Id == request.CategoryId &&
+                                                             data.Status != CommonStatus.Deleted))
+                return Result<string>.Failure(CategoryErrors.NotFound(request.CategoryId));
 
             // Update product
             product.CategoryId = request.CategoryId;
