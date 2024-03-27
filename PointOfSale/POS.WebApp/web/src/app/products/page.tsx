@@ -8,8 +8,8 @@ import { ProductColumns } from '@/components/tables/CustomTableColumns';
 import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
 import { DefaultProductViewModel } from '@/data/DefaultProductViewModel';
 import { CommonStatus } from '@/models/enums/CommonStatus';
-import { CategoryLiteViewModel } from '@/models/interfaces/category/CategoryLiteViewModel';
-import { ProductViewModel } from '@/models/interfaces/product/ProductViewModel'
+import { CategoryLiteViewModel } from '@/models/interfaces/viewmodels/category/CategoryLiteViewModel';
+import { ProductViewModel } from '@/models/interfaces/viewmodels/product/ProductViewModel'
 import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
 import { CustomCardCount } from '@/models/props/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
@@ -44,8 +44,6 @@ const page = () => {
         .then((res:Result<ProductViewModel[]>) => {
             if(res.isSuccess)
                 setProducts(res.data!);
-            else
-                console.log(`${res.error!.code} | ${res.error!.type} | ${res.error!.description}`);
         })
         .catch((err:any) => {
             console.log(err);
@@ -59,11 +57,6 @@ const page = () => {
         .then((res:Result<ProductViewModel>) => {
             if(res.isSuccess)
                 setProduct(res.data!);
-            else
-                console.log(`${res.error!.code} | ${res.error!.type} | ${res.error!.description}`);
-        })
-        .catch((err:any) => {
-            console.log(err);
         });
     }
     const fetchAllCategoryLitesFromApi = () => {
@@ -71,11 +64,6 @@ const page = () => {
         .then((res:Result<CategoryLiteViewModel[]>) => {
             if(res.isSuccess)
                 setCategories(res.data!);
-            else
-                console.log(`${res.error!.code} | ${res.error!.type} | ${res.error!.description}`);
-        })
-        .catch((err:any) => {
-            console.log(err);
         });
     }
     const onEditActionClick = (id:string) => {
@@ -86,15 +74,8 @@ const page = () => {
     const onDeleteActionClick = (id:string) => {
         DeleteProductById(id)
         .then((res:Result<string>) => {
-            if(res.isSuccess) {
+            if(res.isSuccess)
                 setIsRequiresReload(true);
-                console.log(res.data!);
-            }
-            else
-                console.log(`${res.error!.code} | ${res.error!.type} | ${res.error!.description}`);
-        })
-        .catch((err:any) => {
-            console.log(err);
         });
     }
     const onModalClose = () => {

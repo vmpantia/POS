@@ -1,4 +1,4 @@
-import { CategoryLiteViewModel } from "@/models/interfaces/category/CategoryLiteViewModel";
+import { CategoryLiteViewModel } from "@/models/interfaces/viewmodels/category/CategoryLiteViewModel";
 
 export const DefaultCategoryLiteViewModel:CategoryLiteViewModel = {
     id: "",

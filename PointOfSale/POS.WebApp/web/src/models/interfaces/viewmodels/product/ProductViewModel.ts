@@ -1,4 +1,4 @@
-import { CommonStatus } from "../../enums/CommonStatus";
+import { CommonStatus } from "../../../enums/CommonStatus";
 import { CategoryLiteViewModel } from "../category/CategoryLiteViewModel";
 
 export interface ProductViewModel {

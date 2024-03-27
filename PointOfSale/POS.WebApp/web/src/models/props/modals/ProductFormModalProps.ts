@@ -1,5 +1,5 @@
-import { CategoryLiteViewModel } from "@/models/interfaces/category/CategoryLiteViewModel";
-import { ProductViewModel } from "@/models/interfaces/product/ProductViewModel";
+import { CategoryLiteViewModel } from "@/models/interfaces/viewmodels/category/CategoryLiteViewModel";
+import { ProductViewModel } from "@/models/interfaces/viewmodels/product/ProductViewModel";
 
 export interface ProductFormModalProps {
     product: ProductViewModel,

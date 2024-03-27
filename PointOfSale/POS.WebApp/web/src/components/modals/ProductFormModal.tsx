@@ -6,8 +6,11 @@ import CustomActionButton from '../actions/CustomActionButton'
 import { ButtonType } from '@/models/enums/ButtonType'
 import CustomInputTextArea from '../inputs/CustomInputTextArea'
 import CustomSelectionBox from '../inputs/CustomSelectionBox'
+import { EditProductById } from '@/api/ProductApis'
+import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProductByIdDto'
+import { Result } from '@/models/response/Result'
 
-const ProductFormModal = ({product, isNew, setProduct, isOpen, onModalCloseHandler, categories} : ProductFormModalProps) => {
+const ProductFormModal = ({product, isNew, setProduct, isOpen, onModalCloseHandler, setIsRequiresReload, categories} : ProductFormModalProps) => {
 
     // Functions
     const onProductValueChange = (input:any) => {
@@ -20,9 +23,20 @@ const ProductFormModal = ({product, isNew, setProduct, isOpen, onModalCloseHandl
         let selectedValue = categories.filter(data => data.id == value)[0];
         setProduct((data:any) => { return {...data, category: selectedValue} });
     }
-
     const onSaveActionClick = () => {
-        console.log(product);
+        // Prepare request
+        let request:EditProductByIdDto = {
+            categoryId: product.category.id,
+            name: product.name,
+            description: product.description
+        };
+        EditProductById(product.id, request)
+        .then((res:Result<string>) => {
+            if(res.isSuccess) {
+                onModalCloseHandler();
+                setIsRequiresReload(true);
+            }
+        });
     }
     
     return (

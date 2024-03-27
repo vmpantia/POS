@@ -1,5 +1,5 @@
 import { MRT_ColumnDef } from "material-react-table";
-import { ProductViewModel } from '@/models/interfaces/product/ProductViewModel';
+import { ProductViewModel } from '@/models/interfaces/viewmodels/product/ProductViewModel';
 import { CommonStatus } from "@/models/enums/CommonStatus";
 import { Tag } from "antd";
 

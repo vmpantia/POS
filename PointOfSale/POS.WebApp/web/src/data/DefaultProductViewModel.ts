@@ -1,5 +1,5 @@
 import { CommonStatus } from "@/models/enums/CommonStatus";
-import { ProductViewModel } from "@/models/interfaces/product/ProductViewModel";
+import { ProductViewModel } from "@/models/interfaces/viewmodels/product/ProductViewModel";
 import { DefaultCategoryLiteViewModel } from "./DefaultCategoryLiteViewModel";
 
 export const DefaultProductViewModel:ProductViewModel = {
