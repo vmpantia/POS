@@ -1,4 +1,4 @@
-import { InputTextProps } from '@/models/interfaces/inputs/InputTextProps'
+import { InputTextProps } from '@/models/props/inputs/InputTextProps'
 import React, { useState } from 'react'
 
 const CustomInputText = ({id, label, value, placeholder, isRequired, onValueChangedHandler}: InputTextProps) => {

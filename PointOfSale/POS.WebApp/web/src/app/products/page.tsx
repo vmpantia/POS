@@ -111,7 +111,8 @@ const page = () => {
             <ProductFormModal product={selectedProduct}
                               setProduct={setSelectedProduct}
                               isOpen={isModalOpen} 
-                              onModalCloseHandler={onModalClose} />
+                              onModalCloseHandler={onModalClose}
+                              setIsRequiresReload={setIsRequiresReload} />
         </>
     );
 }
