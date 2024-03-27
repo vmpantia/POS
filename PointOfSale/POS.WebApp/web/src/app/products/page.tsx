@@ -6,6 +6,7 @@ import CustomCardCounts from '@/components/CustomCardCounts';
 import ProductFormModal from '@/components/modals/ProductFormModal';
 import { ProductColumns } from '@/components/tables/CustomTableColumns';
 import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
+import { DefaultProductViewModel } from '@/data/DefaultProductViewModel';
 import { CommonStatus } from '@/models/enums/CommonStatus';
 import { CategoryLiteViewModel } from '@/models/interfaces/category/CategoryLiteViewModel';
 import { ProductViewModel } from '@/models/interfaces/product/ProductViewModel'
@@ -18,11 +19,12 @@ const page = () => {
 
     // Hooks
     const [products, setProducts] = useState<ProductViewModel[]>([]);
-    const [selectedProduct, setSelectedProduct] = useState<ProductViewModel | null>(null);
-    const [categories, setCategories] = useState<CategoryLiteViewModel[]>([]);
     const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
     const [isRequiresReload, setIsRequiresReload] = useState<boolean>(false);
+    const [product, setProduct] = useState<ProductViewModel>(DefaultProductViewModel);
+    const [categories, setCategories] = useState<CategoryLiteViewModel[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isNew, setIsNew] = useState<boolean>(true);
 
     // Component Configurations
     const productCards : CustomCardCount[] = [
@@ -56,7 +58,7 @@ const page = () => {
         GetProductById(id!)
         .then((res:Result<ProductViewModel>) => {
             if(res.isSuccess)
-                setSelectedProduct(res.data!);
+                setProduct(res.data!);
             else
                 console.log(`${res.error!.code} | ${res.error!.type} | ${res.error!.description}`);
         })
@@ -78,6 +80,7 @@ const page = () => {
     }
     const onEditActionClick = (id:string) => {
         fetchProductByIdFromApi(id);
+        setIsNew(false);
         setIsModalOpen(true);
     }
     const onDeleteActionClick = (id:string) => {
@@ -95,8 +98,8 @@ const page = () => {
         });
     }
     const onModalClose = () => {
-        setSelectedProduct(null);
-        setIsModalOpen(false); 
+        setProduct(DefaultProductViewModel);
+        setIsModalOpen(false);
     }
     
     // Effects
@@ -125,8 +128,9 @@ const page = () => {
                                          onEditActionClickedHandler={onEditActionClick}
                                          onDeleteActionClickedHandler={onDeleteActionClick} />
             </div>
-            <ProductFormModal product={selectedProduct}
-                              setProduct={setSelectedProduct}
+            <ProductFormModal product={product}
+                              isNew={isNew}
+                              setProduct={setProduct}
                               isOpen={isModalOpen} 
                               onModalCloseHandler={onModalClose}
                               setIsRequiresReload={setIsRequiresReload}

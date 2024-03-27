@@ -19,7 +19,7 @@ const CustomModal = ({ title, isOpen, onClose, children } : CustomModalProps) =>
                             </svg>
                         </button>
                     </div>
-                    <div className=' max-h-[600px] overflow-auto' >
+                    <div className='p-2 max-h-[600px] overflow-auto' >
                         {children}
                     </div>
                 </div>

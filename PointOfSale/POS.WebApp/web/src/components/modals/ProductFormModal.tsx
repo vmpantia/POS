@@ -7,7 +7,7 @@ import { ButtonType } from '@/models/enums/ButtonType'
 import CustomInputTextArea from '../inputs/CustomInputTextArea'
 import CustomSelectionBox from '../inputs/CustomSelectionBox'
 
-const ProductFormModal = ({product, setProduct, isOpen, onModalCloseHandler, categories} : ProductFormModalProps) => {
+const ProductFormModal = ({product, isNew, setProduct, isOpen, onModalCloseHandler, categories} : ProductFormModalProps) => {
 
     // Functions
     const onProductValueChange = (input:any) => {
@@ -26,12 +26,11 @@ const ProductFormModal = ({product, setProduct, isOpen, onModalCloseHandler, cat
     }
     
     return (
-        <CustomModal title={product === null ? "New Product" : "Edit Product"} isOpen={isOpen} onClose={onModalCloseHandler}>
-            <CustomInputText id='name' label='Name' value={product?.name} placeholder='Type Product Name' isRequired={true} onValueChangedHandler={onProductValueChange} />
-            <CustomInputText id='code' label='Code' value={product?.code} placeholder='Type Product Code' isRequired={true} onValueChangedHandler={onProductValueChange} />
-            <CustomSelectionBox id='category' label='Category' data={categories} value={product?.category?.id} isRequired={true} onSelectedValueChangedHandler={onCategoryValueChange} />
-            <CustomInputTextArea id='description' label='Description' value={product?.description} placeholder='Type Product Description' isRequired={false} onValueChangedHandler={onProductValueChange}  />
-            <div className='flex gap-4 columns-2 w-full p-2'>
+        <CustomModal title={isNew ? "New Product" : `Edit Product [${product.code}]`} isOpen={isOpen} onClose={onModalCloseHandler}>
+            <CustomInputText id='name' label='Name' value={product.name} placeholder='Type Product Name' isRequired={true} onValueChangedHandler={onProductValueChange} />
+            <CustomSelectionBox id='category' label='Category' data={categories} value={product.category.id} isRequired={true} onSelectedValueChangedHandler={onCategoryValueChange} />
+            <CustomInputTextArea id='description' label='Description' value={product.description} placeholder='Type Product Description' isRequired={false} onValueChangedHandler={onProductValueChange}  />
+            <div className='flex gap-4 columns-2 w-full'>
                 <CustomActionButton title='Save'
                                     type={ButtonType.Primary}
                                     onButtonClickHandler={onSaveActionClick}/>
