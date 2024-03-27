@@ -15,7 +15,7 @@ import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
 import { CustomCardCount } from '@/models/props/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
 import React, { useEffect, useMemo, useState } from 'react'
-import { ConvertErrorToString } from '../utils/ConversionHelper';
+import { ConvertErrorToString } from '../../utils/ConversionHelper';
 
 const page = () => {
     
