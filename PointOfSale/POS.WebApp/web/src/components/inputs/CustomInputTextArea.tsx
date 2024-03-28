@@ -26,7 +26,8 @@ const CustomInputTextArea = ({id, label, value, placeholder, isRequired, onValue
                                             'focus:ring-blue-500 focus:border-blue-500'}`}
                     placeholder={placeholder}
                     value={value}
-                    onChange={onValueChange} />
+                    onChange={onValueChange}
+                    rows={10} />
             {isRequired && error ? <div className='mt-1 text-sm text-red-500'>{error}</div> : <></>}
         </div>
     )

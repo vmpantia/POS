@@ -4,7 +4,6 @@ import { DeleteProductById, GetAllProducts, GetProductById } from '@/api/Product
 import CustomBreadcrumbs from '@/components/CustomBreadcrumbs';
 import CustomCardCounts from '@/components/CustomCardCounts';
 import useCustomNotification from '@/components/hooks/useCustomNotification';
-import ProductFormModal from '@/components/modals/ProductFormModal';
 import { ProductColumns } from '@/components/tables/CustomTableColumns';
 import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
 import { DefaultProductViewModel } from '@/data/DefaultProductViewModel';
@@ -16,6 +15,7 @@ import { CustomCardCount } from '@/models/props/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
 import React, { useEffect, useState } from 'react'
 import { ConvertErrorToString } from '../../utils/ConversionHelper';
+import ProductFormDrawer from '@/components/drawers/ProductFormDrawer';
 
 const page = () => {
     
@@ -126,7 +126,7 @@ const page = () => {
                                          onDeleteActionClickedHandler={onDeleteActionClick}
                                          onAddActionClickedHandler={onAddActionClick} />
             </div>
-            <ProductFormModal product={product}
+            <ProductFormDrawer product={product}
                               isNew={isNew}
                               isOpen={isModalOpen} 
                               categories={categories}

@@ -6,6 +6,7 @@ export const DefaultProductViewModel:ProductViewModel = {
     id: "",
     code: "",
     name: "",
+    description: "",
     status: CommonStatus.Active,
     statusDescription: "Active",
     category: DefaultCategoryLiteViewModel,

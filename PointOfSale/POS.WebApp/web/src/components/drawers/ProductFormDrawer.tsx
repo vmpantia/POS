@@ -1,5 +1,4 @@
 import React from 'react'
-import CustomModal from './CustomModal'
 import { ProductFormModalProps } from '@/models/props/modals/ProductFormModalProps'
 import CustomInputText from '../inputs/CustomInputText'
 import CustomActionButton from '../actions/CustomActionButton'
@@ -11,8 +10,9 @@ import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProduct
 import { Result } from '@/models/response/Result'
 import { AddProductDto } from '@/models/interfaces/dtos/product/AddProductDto'
 import { ConvertErrorToString } from '@/utils/ConversionHelper'
+import { Drawer } from 'antd'
 
-const ProductFormModal = ({ product, 
+const ProductFormDrawer = ({ product, 
                             isNew, 
                             isOpen, 
                             categories, 
@@ -54,7 +54,7 @@ const ProductFormModal = ({ product,
     }
     
     return (
-        <CustomModal title={isNew ? "New Product" : `Edit Product [${product.code}]`} isOpen={isOpen} onClose={onModalCloseHandler}>
+        <Drawer title={isNew ? "New Product" : `Edit Product [${product.code}]`} onClose={onModalCloseHandler} open={isOpen}>
             <CustomInputText id='name' label='Name' value={product.name} placeholder='Type Product Name' isRequired={true} onValueChangedHandler={onProductValueChange} />
             <CustomSelectionBox id='category' label='Category' data={categories} value={product.category.id} isRequired={true} onSelectedValueChangedHandler={onCategoryValueChange} />
             <CustomInputTextArea id='description' label='Description' value={product.description} placeholder='Type Product Description' isRequired={false} onValueChangedHandler={onProductValueChange}  />
@@ -66,8 +66,8 @@ const ProductFormModal = ({ product,
                                     type={ButtonType.Secondary}
                                     onButtonClickHandler={onModalCloseHandler}/>
             </div>
-        </CustomModal>
+        </Drawer>
     )
 }
 
-export default ProductFormModal
+export default ProductFormDrawer
