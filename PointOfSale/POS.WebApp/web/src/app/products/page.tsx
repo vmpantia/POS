@@ -27,7 +27,7 @@ const page = () => {
     const [categories, setCategories] = useState<CategoryLiteViewModel[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isNew, setIsNew] = useState<boolean>(true);
-    const { notification, ShowNotification } = useCustomNotification('bottomLeft');
+    const { notification, showNotification } = useCustomNotification('bottomLeft');
 
     // Component Configurations
     const productCards : CustomCardCount[] = [
@@ -48,7 +48,7 @@ const page = () => {
             if(res.isSuccess) setProducts(res.data!);
         })
         .catch((res:any) => {
-            ShowNotification('error', ConvertErrorToString(res.response.data.error));
+            showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
         })
         .finally(() => {
             setIsTableLoading(false);
@@ -60,7 +60,7 @@ const page = () => {
             if(res.isSuccess) setProduct(res.data!);
         })
         .catch((res:any) => {
-            ShowNotification('error', ConvertErrorToString(res.response.data.error));
+            showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
         });
     }
     const fetchAllCategoryLitesFromApi = () => {
@@ -69,7 +69,7 @@ const page = () => {
             if(res.isSuccess) setCategories(res.data!);
         })
         .catch((res:any) => {
-            ShowNotification('error', ConvertErrorToString(res.response.data.error));
+            showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
         });
     }
     const onEditActionClick = (id:string) => {
@@ -81,12 +81,12 @@ const page = () => {
         DeleteProductById(id)
         .then((res:Result<string>) => {
             if(res.isSuccess) {
-                ShowNotification('success', res.data!);
+                showNotification('success', res.data!);
                 setIsRequiresReload(true);
             }
         })
         .catch((res:any) => {
-            ShowNotification('error', ConvertErrorToString(res.response.data.error));
+            showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
         });
     }
     const onModalClose = () => {
@@ -122,11 +122,12 @@ const page = () => {
             </div>
             <ProductFormModal product={product}
                               isNew={isNew}
-                              setProduct={setProduct}
                               isOpen={isModalOpen} 
-                              onModalCloseHandler={onModalClose}
-                              setIsRequiresReload={setIsRequiresReload}
-                              categories={categories} />
+                              categories={categories}
+                              setProductHandler={setProduct}
+                              setIsRequiresReloadHandler={setIsRequiresReload}
+                              showNotificationHandler={showNotification}
+                              onModalCloseHandler={onModalClose} />
             {notification}
         </>
     );

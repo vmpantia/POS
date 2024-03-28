@@ -3,10 +3,11 @@ import { ProductViewModel } from "@/models/interfaces/viewmodels/product/Product
 
 export interface ProductFormModalProps {
     product: ProductViewModel,
-    isNew:boolean
-    setProduct: (value:any) => any,
+    isNew:boolean,
     isOpen: boolean,
-    onModalCloseHandler: () => any,
-    setIsRequiresReload: (value:boolean) => any,
     categories: CategoryLiteViewModel[],
+    setProductHandler: (value:any) => any,
+    setIsRequiresReloadHandler: (value:boolean) => any,
+    showNotificationHandler: (type:'success' | 'info' | 'error' | 'warning', description:string) => any,
+    onModalCloseHandler: () => any,
 }

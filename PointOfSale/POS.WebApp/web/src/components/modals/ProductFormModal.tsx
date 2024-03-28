@@ -10,18 +10,25 @@ import { EditProductById } from '@/api/ProductApis'
 import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProductByIdDto'
 import { Result } from '@/models/response/Result'
 
-const ProductFormModal = ({product, isNew, setProduct, isOpen, onModalCloseHandler, setIsRequiresReload, categories} : ProductFormModalProps) => {
+const ProductFormModal = ({ product, 
+                            isNew, 
+                            isOpen, 
+                            categories, 
+                            setProductHandler, 
+                            setIsRequiresReloadHandler, 
+                            showNotificationHandler, 
+                            onModalCloseHandler } : ProductFormModalProps) => {
 
     // Functions
     const onProductValueChange = (input:any) => {
         let property = input.target.id.split("_")[0];
         let value = input.target.value;
-        setProduct((data:any) => { return {...data, [property]: value} });
+        setProductHandler((data:any) => { return {...data, [property]: value} });
     }
     const onCategoryValueChange = (input:any) => {
         let value = input.target.value;
         let selectedValue = categories.filter(data => data.id == value)[0];
-        setProduct((data:any) => { return {...data, category: selectedValue} });
+        setProductHandler((data:any) => { return {...data, category: selectedValue} });
     }
     const onSaveActionClick = () => {
         // Prepare request
@@ -33,8 +40,9 @@ const ProductFormModal = ({product, isNew, setProduct, isOpen, onModalCloseHandl
         EditProductById(product.id, request)
         .then((res:Result<string>) => {
             if(res.isSuccess) {
+                showNotificationHandler('success', res.data!);
+                setIsRequiresReloadHandler(true);
                 onModalCloseHandler();
-                setIsRequiresReload(true);
             }
         });
     }
@@ -51,7 +59,7 @@ const ProductFormModal = ({product, isNew, setProduct, isOpen, onModalCloseHandl
                 <CustomActionButton title='Cancel'
                                     type={ButtonType.Secondary}
                                     onButtonClickHandler={onModalCloseHandler}/>
-            </div>    
+            </div>
         </CustomModal>
     )
 }

@@ -4,7 +4,7 @@ import React from 'react'
 
 const useCustomNotification = (placement:NotificationArgsProps['placement'], duration:number = 3) => {
     const [api, contextHolder] = notification.useNotification();
-    const ShowNotification = (type:'success' | 'info' | 'error' | 'warning', description:string) => {
+    const showNotification = (type:'success' | 'info' | 'error' | 'warning', description:string) => {
         let icon = <></>;
         let message = '';
         switch(type) {
@@ -35,7 +35,7 @@ const useCustomNotification = (placement:NotificationArgsProps['placement'], dur
     }
     return {
         notification: contextHolder,
-        ShowNotification
+        showNotification
     }
 }
 
