@@ -89,6 +89,11 @@ const page = () => {
             showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
         });
     }
+    const onAddActionClick = () => {
+        setProduct(DefaultProductViewModel);
+        setIsNew(true);
+        setIsModalOpen(true);
+    }
     const onModalClose = () => {
         setProduct(DefaultProductViewModel);
         setIsModalOpen(false);
@@ -118,7 +123,8 @@ const page = () => {
                                          columns={ProductColumns}
                                          isLoading={isTableLoading}
                                          onEditActionClickedHandler={onEditActionClick}
-                                         onDeleteActionClickedHandler={onDeleteActionClick} />
+                                         onDeleteActionClickedHandler={onDeleteActionClick}
+                                         onAddActionClickedHandler={onAddActionClick} />
             </div>
             <ProductFormModal product={product}
                               isNew={isNew}

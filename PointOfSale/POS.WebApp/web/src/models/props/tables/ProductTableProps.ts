@@ -5,4 +5,5 @@ export interface ProductTableProps {
     isLoading:boolean,
     onEditActionClickedHandler: (id:string) => any,
     onDeleteActionClickedHandler: (id:string) => any,
+    onAddActionClickedHandler: () => any
 }
