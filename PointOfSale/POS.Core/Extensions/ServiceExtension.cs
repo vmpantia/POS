@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using POS.Core.Helpers;
+using POS.Domain.Helpers;
 using System.Reflection;
 
 namespace POS.Core.Extensions
@@ -9,6 +11,7 @@ namespace POS.Core.Extensions
         {
             services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddScoped<IProductHelper, ProductHelper>();
         }
     }
 }

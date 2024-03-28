@@ -9,5 +9,7 @@ namespace POS.Domain.Contracts.Repositories
         Task<Product?> GetProductByIdAsync(Guid id);
         Task<Product?> GetProductByExpressionAsync(Expression<Func<Product, bool>> expression);
         Task UpdateProductAsync(Product product);
+        Task AddProductAsync(Product product);
+        Task<bool> IsProductExistAsync(Expression<Func<Product, bool>> expression);
     }
 }

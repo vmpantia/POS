@@ -27,5 +27,12 @@ namespace POS.Infrastructure.Database.Repositories
 
         public async Task UpdateProductAsync(Product product) =>
             await base.UpdateAsync(product);
+
+        public async Task AddProductAsync(Product product) =>
+            await base.AddAsync(product);
+
+        public async Task<bool> IsProductExistAsync(Expression<Func<Product, bool>> expression) =>
+            await base.GetByExpression(expression)
+                      .AnyAsync();
     }
 }

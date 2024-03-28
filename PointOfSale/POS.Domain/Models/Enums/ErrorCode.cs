@@ -5,6 +5,7 @@
         Unexpected,
         NotFound,
         NULL,
-        AlreadyDeleted,
+        Exist,
+        Deleted,
     }
 }

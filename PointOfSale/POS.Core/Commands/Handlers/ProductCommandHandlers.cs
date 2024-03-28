@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using POS.Core.Commands.Models.Product;
 using POS.Domain.Contracts.Repositories;
+using POS.Domain.Helpers;
+using POS.Domain.Models.Entities;
 using POS.Domain.Models.Enums;
 using POS.Domain.Response;
 using POS.Domain.Response.Errors;
@@ -9,13 +11,16 @@ namespace POS.Core.Commands.Handlers
 {
     public class ProductCommandHandlers :
         IRequestHandler<DeleteProductByIdCommand, Result<string>>,
-        IRequestHandler<EditProductByIdCommand, Result<string>>
+        IRequestHandler<EditProductByIdCommand, Result<string>>,
+        IRequestHandler<AddProductCommand, Result<string>>
     {
         private readonly IProductRepository _product;
+        private readonly IProductHelper _productHelper;
         private readonly ICategoryRepository _category;
-        public ProductCommandHandlers(IProductRepository product, ICategoryRepository category)
+        public ProductCommandHandlers(IProductRepository product, IProductHelper productHelper, ICategoryRepository category)
         {
             _product = product;
+            _productHelper = productHelper;
             _category = category;
         }
 
@@ -58,6 +63,37 @@ namespace POS.Core.Commands.Handlers
             await _product.UpdateProductAsync(product);
 
             return Result<string>.Success("Product updated succesfully in the database.");
+        }
+
+        public async Task<Result<string>> Handle(AddProductCommand request, CancellationToken cancellationToken)
+        {
+            // Check if new category id exist
+            if (!await _category.IsCategoryExistAsync(data => data.Id == request.CategoryId &&
+                                                              data.Status != CommonStatus.Deleted))
+                return Result<string>.Failure(CategoryErrors.NotFound(request.CategoryId));
+
+            // Check if new product name is exist with certain category id
+            if (await _product.IsProductExistAsync(data => data.Name == request.Name &&
+                                                            data.CategoryId == request.CategoryId &&
+                                                            data.Status != CommonStatus.Deleted))
+                return Result<string>.Failure(ProductErrors.Exist(request.Name, request.CategoryId));
+
+            // Add new product
+            var newProductId = Guid.NewGuid();
+            var newProduct = new Product
+            {
+                Id = Guid.NewGuid(),
+                Code = await _productHelper.GenerateProductCodeAsync(DateTime.Now),
+                CategoryId = request.CategoryId,
+                Name = request.Name,
+                Description = request.Description,
+                ImagePath = null,
+                CreatedBy = request.Requestor,
+                CreatedAt = DateTime.Now,
+            };
+            await _product.AddProductAsync(newProduct);
+
+            return Result<string>.Success("Product added succesfully in the database.");
         }
     }
 }

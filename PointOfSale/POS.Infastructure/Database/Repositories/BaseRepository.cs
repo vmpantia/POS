@@ -31,5 +31,11 @@ namespace POS.Infrastructure.Database.Repositories
             _table.Update(entity);
             await _context.SaveChangesAsync();
         }
+
+        public async Task AddAsync(TEntity entity)
+        {
+            _table.Add(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 }

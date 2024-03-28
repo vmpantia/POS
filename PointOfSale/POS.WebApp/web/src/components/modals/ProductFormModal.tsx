@@ -6,9 +6,11 @@ import CustomActionButton from '../actions/CustomActionButton'
 import { ButtonType } from '@/models/enums/ButtonType'
 import CustomInputTextArea from '../inputs/CustomInputTextArea'
 import CustomSelectionBox from '../inputs/CustomSelectionBox'
-import { EditProductById } from '@/api/ProductApis'
+import { AddProduct, EditProductById } from '@/api/ProductApis'
 import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProductByIdDto'
 import { Result } from '@/models/response/Result'
+import { AddProductDto } from '@/models/interfaces/dtos/product/AddProductDto'
+import { ConvertErrorToString } from '@/utils/ConversionHelper'
 
 const ProductFormModal = ({ product, 
                             isNew, 
@@ -32,18 +34,22 @@ const ProductFormModal = ({ product,
     }
     const onSaveActionClick = () => {
         // Prepare request
-        let request:EditProductByIdDto = {
+        let request:EditProductByIdDto | AddProductDto = {
             categoryId: product.category.id,
             name: product.name,
             description: product.description
         };
-        EditProductById(product.id, request)
+        (isNew ? AddProduct(request) : 
+                 EditProductById(product.id, request))
         .then((res:Result<string>) => {
             if(res.isSuccess) {
                 showNotificationHandler('success', res.data!);
                 setIsRequiresReloadHandler(true);
                 onModalCloseHandler();
             }
+        })
+        .catch((res:any) => {
+            showNotificationHandler('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
         });
     }
     

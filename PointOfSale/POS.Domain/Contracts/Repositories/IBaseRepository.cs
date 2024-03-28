@@ -8,6 +8,7 @@ namespace POS.Domain.Contracts.Repositories
         IQueryable<TEntity> GetByExpression(Expression<Func<TEntity, bool>> expression);
         Task<TEntity?> GetOneByIdAsync<TId>(TId id);
         Task<TEntity?> GetOneByExpressionAsync(Expression<Func<TEntity, bool>> expressiond);
-        Task UpdateAsync(TEntity entity); 
+        Task UpdateAsync(TEntity entity);
+        Task AddAsync(TEntity entity);
     }
 }
