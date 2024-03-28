@@ -1,6 +1,7 @@
+import { CommonStatus } from '@/models/enums/CommonStatus';
 import { ProductTableProps } from '@/models/props/tables/ProductTableProps'
 import { FolderAddOutlined } from '@ant-design/icons';
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { MRT_ActionMenuItem, MRT_ShowHideColumnsButton, MRT_ToggleFiltersButton, MRT_ToggleFullScreenButton, MRT_ToggleGlobalFilterButton, MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React from 'react'
@@ -10,6 +11,7 @@ const ProductsTableWithAction = ({ title,
                                    columns,  
                                    isLoading, 
                                    onEditActionClickedHandler, 
+                                   onEditStatusActionClickedHandler,
                                    onDeleteActionClickedHandler, 
                                    onAddActionClickedHandler }:ProductTableProps) => {
     const table = useMaterialReactTable({ 
@@ -22,11 +24,21 @@ const ProductsTableWithAction = ({ title,
         enableColumnPinning: true,
         enableRowActions: true,
         renderRowActionMenuItems: ({ closeMenu, row, table }) => [
-            <MRT_ActionMenuItem //or just use a normal MUI MenuItem component
+            <MRT_ActionMenuItem
                     icon={<Edit />}
                     key="edit"
                     label="Edit"
                     onClick={() => { onEditActionClickedHandler(row.original['id']); closeMenu(); }}
+                    table={table}
+            />,
+            <MRT_ActionMenuItem
+                    icon={row.original['status'] === CommonStatus.Active ? <ToggleOff /> : <ToggleOn />}
+                    key="edit-status"
+                    label={row.original['status'] === CommonStatus.Active ? "Inactive" : "Active"}
+                    onClick={() => { onEditStatusActionClickedHandler(row.original['id'], 
+                                                                      row.original['status'] === CommonStatus.Active ? CommonStatus.Inactive : 
+                                                                                                                       CommonStatus.Active); 
+                                     closeMenu(); }}
                     table={table}
             />,
             <MRT_ActionMenuItem

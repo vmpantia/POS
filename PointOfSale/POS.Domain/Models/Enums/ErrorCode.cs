@@ -7,5 +7,7 @@
         NULL,
         Exist,
         Deleted,
+        InvalidValue,
+        SameValue,
     }
 }

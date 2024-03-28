@@ -12,7 +12,8 @@ namespace POS.Core.Commands.Handlers
     public class ProductCommandHandlers :
         IRequestHandler<DeleteProductByIdCommand, Result<string>>,
         IRequestHandler<EditProductByIdCommand, Result<string>>,
-        IRequestHandler<AddProductCommand, Result<string>>
+        IRequestHandler<AddProductCommand, Result<string>>,
+        IRequestHandler<EditProductStatusByIdCommand, Result<string>>
     {
         private readonly IProductRepository _product;
         private readonly IProductHelper _productHelper;
@@ -33,7 +34,7 @@ namespace POS.Core.Commands.Handlers
             if (product is null) return Result<string>.Failure(ProductErrors.NotFound(request.Id));
 
             // Soft delete product
-            product.Status = Domain.Models.Enums.CommonStatus.Deleted;
+            product.Status = CommonStatus.Deleted;
             product.DeletedBy = request.Requestor;
             product.DeletedAt = DateTime.Now;
             await _product.UpdateProductAsync(product);
@@ -94,6 +95,29 @@ namespace POS.Core.Commands.Handlers
             await _product.AddProductAsync(newProduct);
 
             return Result<string>.Success("Product added succesfully in the database.");
+        }
+
+        public async Task<Result<string>> Handle(EditProductStatusByIdCommand request, CancellationToken cancellationToken)
+        {
+            // Check if the new status is valid
+            if (request.NewStatus == CommonStatus.Deleted) return Result<string>.Failure(ProductErrors.InvalidValue(request.NewStatus));
+
+            // Get product by id in the database
+            var product = await _product.GetProductByIdAsync(request.Id);
+
+            // Check if product exist
+            if (product is null) return Result<string>.Failure(ProductErrors.NotFound(request.Id));
+
+            // Check if the current status and new status is same
+            if (product.Status == request.NewStatus) return Result<string>.Failure(ProductErrors.SameValue(product.Status, request.NewStatus));
+
+            // Update product status
+            product.Status = request.NewStatus;
+            product.UpdatedBy = request.Requestor;
+            product.UpdatedAt = DateTime.Now;
+            await _product.UpdateProductAsync(product);
+
+            return Result<string>.Success("Product status updated succesfully in the database.");
         }
     }
 }

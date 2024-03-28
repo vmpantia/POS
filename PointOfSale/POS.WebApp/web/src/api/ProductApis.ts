@@ -3,6 +3,7 @@ import { Result } from "@/models/response/Result";
 import { AxiosApi } from "./AxiosApi";
 import { EditProductByIdDto } from "@/models/interfaces/dtos/product/EditProductByIdDto";
 import { AddProductDto } from "@/models/interfaces/dtos/product/AddProductDto";
+import { EditProductStatusByIdDto } from "@/models/interfaces/dtos/product/EditProductStatusByIdDto";
 
 export const GetAllProducts = () => 
     AxiosApi.get<Result<ProductViewModel[]>>('products')
@@ -18,6 +19,10 @@ export const DeleteProductById = (id:string) =>
 
 export const EditProductById = (id:string, request:EditProductByIdDto) => 
     AxiosApi.put<Result<string>>(`products/${id}`, request)
+            .then(({data}) => data);
+
+export const EditProductStatusById = (id:string, request:EditProductStatusByIdDto) => 
+    AxiosApi.patch<Result<string>>(`products/${id}`, request)
             .then(({data}) => data);
 
 export const AddProduct = (request:AddProductDto) => 

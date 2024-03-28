@@ -1,6 +1,6 @@
 'use client'
 import { GetAllCategoryLites } from '@/api/CategoryApis';
-import { DeleteProductById, GetAllProducts, GetProductById } from '@/api/ProductApis';
+import { DeleteProductById, EditProductStatusById, GetAllProducts, GetProductById } from '@/api/ProductApis';
 import CustomBreadcrumbs from '@/components/CustomBreadcrumbs';
 import CustomCardCounts from '@/components/CustomCardCounts';
 import useCustomNotification from '@/components/hooks/useCustomNotification';
@@ -16,6 +16,7 @@ import { Result } from '@/models/response/Result';
 import React, { useEffect, useState } from 'react'
 import { ConvertErrorToString } from '../../utils/ConversionHelper';
 import ProductFormDrawer from '@/components/drawers/ProductFormDrawer';
+import { EditProductStatusByIdDto } from '@/models/interfaces/dtos/product/EditProductStatusByIdDto';
 
 const page = () => {
     
@@ -77,6 +78,19 @@ const page = () => {
         setIsNew(false);
         setIsModalOpen(true);
     }
+    const onEditStatusActionClick = (id:string, newStatus:CommonStatus) => {
+        let request:EditProductStatusByIdDto = { newStatus: newStatus }
+        EditProductStatusById(id, request)
+        .then((res:Result<string>) => {
+            if(res.isSuccess) {
+                showNotification('success', res.data!);
+                setIsRequiresReload(true);
+            }
+        })
+        .catch((res:any) => {
+            showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
+        });
+    }
     const onDeleteActionClick = (id:string) => {
         DeleteProductById(id)
         .then((res:Result<string>) => {
@@ -123,6 +137,7 @@ const page = () => {
                                          columns={ProductColumns}
                                          isLoading={isTableLoading}
                                          onEditActionClickedHandler={onEditActionClick}
+                                         onEditStatusActionClickedHandler={onEditStatusActionClick}
                                          onDeleteActionClickedHandler={onDeleteActionClick}
                                          onAddActionClickedHandler={onAddActionClick} />
             </div>

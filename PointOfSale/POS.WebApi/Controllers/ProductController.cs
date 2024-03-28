@@ -33,5 +33,9 @@ namespace POS.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProductAsync([FromBody] AddProductDto request) =>
             await HandleRequestAsync<AddProductCommand, string>(new AddProductCommand(request));
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> EditProductStatusAsync(Guid id, [FromBody] EditProductStatusByIdDto request) =>
+            await HandleRequestAsync<EditProductStatusByIdCommand, string>(new EditProductStatusByIdCommand(id, request));
     }
 }
