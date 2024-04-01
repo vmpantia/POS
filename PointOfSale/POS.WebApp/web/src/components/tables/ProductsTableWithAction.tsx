@@ -1,7 +1,6 @@
 import { CommonStatus } from '@/models/enums/CommonStatus';
 import { ProductTableProps } from '@/models/props/tables/ProductTableProps'
-import { FolderAddOutlined } from '@ant-design/icons';
-import { Delete, Edit, ToggleOff, ToggleOn } from '@mui/icons-material';
+import { AddCircleOutlineOutlined, Delete, Edit, PictureAsPdfOutlined, PrintOutlined, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { MRT_ActionMenuItem, MRT_ShowHideColumnsButton, MRT_ToggleFiltersButton, MRT_ToggleFullScreenButton, MRT_ToggleGlobalFilterButton, MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React from 'react'
@@ -23,6 +22,36 @@ const ProductsTableWithAction = ({ title,
         enableRowNumbers: true,
         enableColumnPinning: true,
         enableRowActions: true,
+        muiCircularProgressProps: {
+            thickness: 3,
+            size: 55,
+        },
+        muiSkeletonProps: {
+            animation: 'pulse',
+            height: 28,
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box sx={{ p: '5px' }}>
+                <Tooltip title="Add Product">
+                    <IconButton onClick={onAddActionClickedHandler}>
+                        <AddCircleOutlineOutlined />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Export PDF">
+                    <IconButton onClick={() => window.print()}>
+                        <PictureAsPdfOutlined />
+                    </IconButton>
+                </Tooltip>
+            </Box>
+        ),
+        renderToolbarInternalActions: ({table}) => (
+            <Box sx={{ p: '5px' }}>
+                <MRT_ToggleGlobalFilterButton table={table} />
+                <MRT_ToggleFiltersButton table={table} />
+                <MRT_ShowHideColumnsButton table={table} />
+                <MRT_ToggleFullScreenButton table={table} />
+            </Box>
+        ),
         renderRowActionMenuItems: ({ closeMenu, row, table }) => [
             <MRT_ActionMenuItem
                     icon={<Edit />}
@@ -49,35 +78,16 @@ const ProductsTableWithAction = ({ title,
                 table={table}
             />,
         ],
-        muiCircularProgressProps: {
-            thickness: 3,
-            size: 55,
-        },
-        muiSkeletonProps: {
-            animation: 'pulse',
-            height: 28,
-        },
-        renderTopToolbarCustomActions: () => (
-            <div className='pl-2 py-1 text-xl font-bold'>
-                {title}
-            </div>
-        ),
-        renderToolbarInternalActions: ({table}) => (
-            <Box>
-                <Tooltip title="Add Product">
-                    <IconButton onClick={onAddActionClickedHandler}>
-                        <FolderAddOutlined />
-                    </IconButton>
-                </Tooltip>
-                <MRT_ToggleGlobalFilterButton table={table} />
-                <MRT_ToggleFiltersButton table={table} />
-                <MRT_ShowHideColumnsButton table={table} />
-                <MRT_ToggleFullScreenButton table={table} />
-            </Box>
-        ),
     });
 
-    return <MaterialReactTable table={table}/>
+    return (
+        <>
+            <div className='text-xl font-bold mb-5'>
+                {title}
+            </div>
+            <MaterialReactTable table={table}/>
+        </>
+    );
 }
 
 export default ProductsTableWithAction

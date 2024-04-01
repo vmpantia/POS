@@ -1,7 +1,7 @@
 import { CustomCardCount, CustomCardCountProps } from '@/models/props/CustomCardCountProps'
 import React from 'react'
 
-const CustomCardCounts = ({ cards, isLoading }:CustomCardCountProps) => {
+const CustomCardCounts = ({ title, cards, isLoading }:CustomCardCountProps) => {
     const displayCardCount = (index:number, card:CustomCardCount) => 
         isLoading ?
             <div key={index} className="p-6 bg-white rounded-lg drop-shadow-md">
@@ -19,9 +19,14 @@ const CustomCardCounts = ({ cards, isLoading }:CustomCardCountProps) => {
             </div> 
         
     return (
-        <div className="pb-10 grid gap-4 grid-cols-1 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
-            {cards.map((card:CustomCardCount, index:number) => displayCardCount(index, card))}
-        </div>
+        <>
+            <div className='text-xl font-bold mb-5'>
+                {title}
+            </div>
+            <div className="pb-10 grid gap-4 grid-cols-1 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+                {cards.map((card:CustomCardCount, index:number) => displayCardCount(index, card))}
+            </div>
+        </>
     )
 }
 

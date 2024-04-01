@@ -131,7 +131,7 @@ const page = () => {
         <>
             <div className='p-10'>
                 <CustomBreadcrumbs pages={productPages} />
-                <CustomCardCounts cards={productCards} isLoading={isTableLoading} />
+                <CustomCardCounts title='Summary' cards={productCards} isLoading={isTableLoading} />
                 <ProductsTableWithAction title='Products'
                                          data={products}
                                          columns={ProductColumns}

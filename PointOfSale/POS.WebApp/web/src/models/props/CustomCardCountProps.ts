@@ -1,4 +1,5 @@
 export interface CustomCardCountProps {
+    title:string,
     cards: CustomCardCount[],
     isLoading: boolean,
 }
