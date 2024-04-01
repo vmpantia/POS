@@ -1,4 +1,5 @@
 import { CustomInputTextProps } from '@/models/props/inputs/CustomInputTextProps';
+import { CheckRequireField } from '@/utils/InputHelper';
 import React, { useState } from 'react'
 
 const CustomInputTextArea = ({id, label, value, placeholder, isRequired, onValueChangedHandler}: CustomInputTextProps) => {
@@ -8,8 +9,7 @@ const CustomInputTextArea = ({id, label, value, placeholder, isRequired, onValue
 
     // Functions
     const onValueChange = (input:any) => {
-        let value = input.target.value;
-        setError(isRequired && value === null || value === "" ? "This field is required." : null);
+        setError(CheckRequireField(isRequired, input.target.value));
         onValueChangedHandler(input);
     }
 
@@ -26,8 +26,9 @@ const CustomInputTextArea = ({id, label, value, placeholder, isRequired, onValue
                                             'focus:ring-blue-500 focus:border-blue-500'}`}
                     placeholder={placeholder}
                     value={value}
+                    rows={10}
                     onChange={onValueChange}
-                    rows={10} />
+                    onFocus={(e) => setError(CheckRequireField(isRequired, e.target.value))} /> 
             {isRequired && error ? <div className='mt-1 text-sm text-red-500'>{error}</div> : <></>}
         </div>
     )

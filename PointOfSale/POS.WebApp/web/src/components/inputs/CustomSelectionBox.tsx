@@ -1,4 +1,5 @@
 import { CustomSelectionBoxProps } from '@/models/props/inputs/CustomSelectionBoxProps'
+import { CheckRequireField } from '@/utils/InputHelper';
 import React, { useState } from 'react'
 
 const CustomSelectionBox = ({ id, label, data, value, isRequired, onSelectedValueChangedHandler }:CustomSelectionBoxProps) => {
@@ -8,8 +9,7 @@ const CustomSelectionBox = ({ id, label, data, value, isRequired, onSelectedValu
     
     // Functions
     const onSelectedValueChange = (input:any) => {
-        let value = input.target.value;
-        setError(isRequired && value === null || value === "" ? "This field is required." : null);
+        setError(CheckRequireField(isRequired, input.target.value));
         onSelectedValueChangedHandler(input);
     }
 
@@ -25,7 +25,8 @@ const CustomSelectionBox = ({ id, label, data, value, isRequired, onSelectedValu
                                  ${error ? (isRequired ? 'focus:ring-red-500 focus:border-red-500' : '') :
                                            'focus:ring-blue-500 focus:border-blue-500'}`}
                     value={value}
-                    onChange={onSelectedValueChange}>
+                    onChange={onSelectedValueChange}
+                    onFocus={(e) => setError(CheckRequireField(isRequired, e.target.value))}>
                 {data.map(data => <option key={data.id} value={data.id}>{data.name}</option>)}
             </select>
             {isRequired && error ? <div className='mt-1 text-sm text-red-500'>{error}</div> : <></>}
