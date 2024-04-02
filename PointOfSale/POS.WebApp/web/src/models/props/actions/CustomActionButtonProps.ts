@@ -1,7 +1,7 @@
-import { ButtonType } from "@/models/enums/ButtonType";
-
 export interface CustomActionButtonProps {
-    title:string;
-    type:ButtonType;
-    onButtonClickHandler: () => any
+    label: string,
+    type?: "button" | "reset" | "submit",
+    style: "primary" | "secondary" | "danger",
+    disabled?: boolean,
+    onButtonClickHandler?: () => any
 }

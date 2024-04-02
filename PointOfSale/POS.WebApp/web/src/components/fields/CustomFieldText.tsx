@@ -11,7 +11,8 @@ const CustomFieldText = ({id, label, type, placeholder, optional, error, registe
             <input id={`${id}_input`} 
                    name={`${id}_input`} 
                    type={type} 
-                   className={`bg-gray-50 border text-sm rounded outline-none block w-full p-2.5
+                   className={`bg-gray-50 text-sm rounded outline-none block w-full p-2.5 
+                                ${error ? 'border border-red-500' : 'border'}
                                 ${error ? 'focus:ring-red-500 focus:border-red-500' :
                                           'focus:ring-blue-500 focus:border-blue-500'}`}
                    placeholder={placeholder}

@@ -13,6 +13,7 @@ import { GetAllCategoryLites } from '@/api/CategoryApis'
 import { CategoryLiteViewModel } from '@/models/interfaces/viewmodels/category/CategoryLiteViewModel'
 import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProductByIdDto'
 import { AddProductDto } from '@/models/interfaces/dtos/product/AddProductDto'
+import CustomActionButton from '../actions/CustomActionButton'
 
 const ProductFormDrawer = ({ productId, 
                             isOpen, 
@@ -93,7 +94,11 @@ const ProductFormDrawer = ({ productId,
                     optional={false} 
                     error={errors.name} 
                     register={register('name', {
-                        required: "Product Name is required."
+                        required: "Product name is required.",
+                        maxLength: {
+                            value: 50,
+                            message: "Product name must be 50 characters."
+                        }
                     })} />
                 <CustomFieldSelectionBox
                     id='category'
@@ -103,7 +108,7 @@ const ProductFormDrawer = ({ productId,
                     data={categories}
                     error={errors.categoryId} 
                     register={register('categoryId', {
-                        required: "Product Category is required."
+                        required: "Product category is required."
                     })} />
                 <CustomFieldTextArea 
                     id='description' 
@@ -112,9 +117,17 @@ const ProductFormDrawer = ({ productId,
                     optional={true} 
                     error={errors.description}
                     register={register('description')} />
-                <button type='submit' disabled={isSubmitting}>
-                    {isSubmitting ? "Loading..." : "Submit"}
-                </button>
+                <div className='flex gap-4 columns-2 w-full'>
+                    <CustomActionButton 
+                        label={isSubmitting ? "Loading..." : "Save"} 
+                        type="submit"
+                        style="primary"
+                        disabled={isSubmitting} />
+                    <CustomActionButton label='Cancel'
+                                        type="button"
+                                        style="danger"
+                                        onButtonClickHandler={onModalCloseHandler}/>
+                </div>
             </form>
         </Drawer>
     )

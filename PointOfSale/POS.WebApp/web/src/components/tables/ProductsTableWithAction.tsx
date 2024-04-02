@@ -19,7 +19,6 @@ const ProductsTableWithAction = ({ title,
         state: {
             isLoading: isLoading,
         },
-        enableRowNumbers: true,
         enableColumnPinning: true,
         enableRowActions: true,
         muiCircularProgressProps: {
