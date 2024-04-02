@@ -1,46 +1,66 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ProductFormModalProps } from '@/models/props/modals/ProductFormModalProps'
-import CustomInputText from '../inputs/CustomInputText'
-import CustomActionButton from '../actions/CustomActionButton'
-import { ButtonType } from '@/models/enums/ButtonType'
-import CustomInputTextArea from '../inputs/CustomInputTextArea'
-import CustomSelectionBox from '../inputs/CustomSelectionBox'
-import { AddProduct, EditProductById } from '@/api/ProductApis'
-import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProductByIdDto'
-import { Result } from '@/models/response/Result'
-import { AddProductDto } from '@/models/interfaces/dtos/product/AddProductDto'
-import { ConvertErrorToString } from '@/utils/ConversionHelper'
 import { Drawer } from 'antd'
+import CustomFieldText from '../fields/CustomFieldText'
+import CustomFieldTextArea from '../fields/CustomFieldTextArea'
+import CustomFieldSelectionBox from '../fields/CustomFieldSelectionBox'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { ProductViewModel } from '@/models/interfaces/viewmodels/product/ProductViewModel'
+import { ConvertErrorToString } from '@/utils/ConversionHelper'
+import { AddProduct, EditProductById, GetProductById } from '@/api/ProductApis'
+import { Result } from '@/models/response/Result'
+import { GetAllCategoryLites } from '@/api/CategoryApis'
+import { CategoryLiteViewModel } from '@/models/interfaces/viewmodels/category/CategoryLiteViewModel'
+import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProductByIdDto'
+import { AddProductDto } from '@/models/interfaces/dtos/product/AddProductDto'
 
-const ProductFormDrawer = ({ product, 
-                            isNew, 
+const ProductFormDrawer = ({ productId, 
                             isOpen, 
-                            categories, 
-                            setProductHandler, 
                             setIsRequiresReloadHandler, 
                             showNotificationHandler, 
                             onModalCloseHandler } : ProductFormModalProps) => {
+                                
+    // Check if the transaction will be new or edit
+    const isNew = !productId;
+
+    // Hooks
+    const [product, setProduct] = useState<ProductViewModel>();
+    const [categories, setCategories] = useState<CategoryLiteViewModel[]>([]);
+    const {
+        register, 
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors, isSubmitting } 
+    } = useForm<EditProductByIdDto | AddProductDto>();
 
     // Functions
-    const onProductValueChange = (input:any) => {
-        let property = input.target.id.split("_")[0];
-        let value = input.target.value;
-        setProductHandler((data:any) => { return {...data, [property]: value} });
+    const fetchProductByIdFromApi = (id:string) => {
+        GetProductById(id!)
+        .then((res:Result<ProductViewModel>) => {
+            if(res.isSuccess) {
+                setValue('categoryId', res.data!.category.id);
+                setValue('name', res.data!.name);
+                setValue('description', res.data?.description);
+                setProduct(res.data!);
+            } 
+        })
+        .catch((res:any) => {
+            showNotificationHandler('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
+        });
     }
-    const onCategoryValueChange = (input:any) => {
-        let value = input.target.value;
-        let selectedValue = categories.filter(data => data.id == value)[0];
-        setProductHandler((data:any) => { return {...data, category: selectedValue} });
+    const fetchAllCategoryLitesFromApi = () => {
+        GetAllCategoryLites()
+        .then((res:Result<CategoryLiteViewModel[]>) => {
+            if(res.isSuccess) setCategories(res.data!);
+        })
+        .catch((res:any) => {
+            showNotificationHandler('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
+        });
     }
-    const onSaveActionClick = () => {
-        // Prepare request
-        let request:EditProductByIdDto | AddProductDto = {
-            categoryId: product.category.id,
-            name: product.name,
-            description: product.description
-        };
-        (isNew ? AddProduct(request) : 
-                 EditProductById(product.id, request))
+    const onSubmit: SubmitHandler<EditProductByIdDto | AddProductDto> = async (data) => {
+        (isNew ? AddProduct(data) : 
+                 EditProductById(product!.id, data))
         .then((res:Result<string>) => {
             if(res.isSuccess) {
                 showNotificationHandler('success', res.data!);
@@ -51,21 +71,51 @@ const ProductFormDrawer = ({ product,
         .catch((res:any) => {
             showNotificationHandler('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
         });
-    }
+    };
+
+    useEffect(() => {
+        // Always reset and fetch required data when opening modal
+        if(isOpen) {
+            reset();
+            fetchAllCategoryLitesFromApi();
+            if (!isNew) fetchProductByIdFromApi(productId);
+        }
+    }, [isOpen]);
     
     return (
-        <Drawer title={isNew ? "New Product" : `Edit Product [${product.code}]`} onClose={onModalCloseHandler} open={isOpen}>
-            <CustomInputText id='name' label='Name' value={product.name} placeholder='Type Product Name' isRequired={true} onValueChangedHandler={onProductValueChange} />
-            <CustomSelectionBox id='category' label='Category' data={categories} value={product.category.id} isRequired={true} onSelectedValueChangedHandler={onCategoryValueChange} />
-            <CustomInputTextArea id='description' label='Description' value={product.description} placeholder='Type Product Description' isRequired={false} onValueChangedHandler={onProductValueChange}  />
-            <div className='flex gap-4 columns-2 w-full'>
-                <CustomActionButton title='Save'
-                                    type={ButtonType.Primary}
-                                    onButtonClickHandler={onSaveActionClick}/>
-                <CustomActionButton title='Cancel'
-                                    type={ButtonType.Secondary}
-                                    onButtonClickHandler={onModalCloseHandler}/>
-            </div>
+        <Drawer title={isNew ? "New Product" : `Edit Product [${product?.code}]`} onClose={onModalCloseHandler} open={isOpen}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <CustomFieldText 
+                    id='name' 
+                    label='Name' 
+                    type='text' 
+                    placeholder='Type Product Name' 
+                    optional={false} 
+                    error={errors.name} 
+                    register={register('name', {
+                        required: "Product Name is required."
+                    })} />
+                <CustomFieldSelectionBox
+                    id='category'
+                    label='Category'
+                    placeholder='Select Product Category'
+                    optional={false}
+                    data={categories}
+                    error={errors.categoryId} 
+                    register={register('categoryId', {
+                        required: "Product Category is required."
+                    })} />
+                <CustomFieldTextArea 
+                    id='description' 
+                    label='Description' 
+                    placeholder='Type Product Description' 
+                    optional={true} 
+                    error={errors.description}
+                    register={register('description')} />
+                <button type='submit' disabled={isSubmitting}>
+                    {isSubmitting ? "Loading..." : "Submit"}
+                </button>
+            </form>
         </Drawer>
     )
 }

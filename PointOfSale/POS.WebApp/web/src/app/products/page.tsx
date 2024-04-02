@@ -24,10 +24,8 @@ const page = () => {
     const [products, setProducts] = useState<ProductViewModel[]>([]);
     const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
     const [isRequiresReload, setIsRequiresReload] = useState<boolean>(false);
-    const [product, setProduct] = useState<ProductViewModel>(DefaultProductViewModel);
-    const [categories, setCategories] = useState<CategoryLiteViewModel[]>([]);
+    const [selectedProductId, setSelectedProductId] = useState<string | null>();
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [isNew, setIsNew] = useState<boolean>(true);
     const { notification, showNotification } = useCustomNotification('bottomLeft');
 
     // Component Configurations
@@ -55,27 +53,8 @@ const page = () => {
             setIsTableLoading(false);
         });
     }
-    const fetchProductByIdFromApi = (id:string) => {
-        GetProductById(id!)
-        .then((res:Result<ProductViewModel>) => {
-            if(res.isSuccess) setProduct(res.data!);
-        })
-        .catch((res:any) => {
-            showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
-        });
-    }
-    const fetchAllCategoryLitesFromApi = () => {
-        GetAllCategoryLites()
-        .then((res:Result<CategoryLiteViewModel[]>) => {
-            if(res.isSuccess) setCategories(res.data!);
-        })
-        .catch((res:any) => {
-            showNotification('error', res.response === undefined ? res.message : ConvertErrorToString(res.response.data.error));
-        });
-    }
     const onEditActionClick = (id:string) => {
-        fetchProductByIdFromApi(id);
-        setIsNew(false);
+        setSelectedProductId(id);
         setIsModalOpen(true);
     }
     const onEditStatusActionClick = (id:string, newStatus:CommonStatus) => {
@@ -104,25 +83,22 @@ const page = () => {
         });
     }
     const onAddActionClick = () => {
-        setProduct(DefaultProductViewModel);
-        setIsNew(true);
+        setSelectedProductId(null);
         setIsModalOpen(true);
     }
     const onModalClose = () => {
-        setProduct(DefaultProductViewModel);
+        setSelectedProductId(null);
         setIsModalOpen(false);
     }
     
     // Effects
     useEffect(() => {
         fetchAllProductsFromApi();
-        fetchAllCategoryLitesFromApi();
     }, [])
 
     useEffect(() => {
         if(isRequiresReload) {
             fetchAllProductsFromApi();
-            fetchAllCategoryLitesFromApi();
             setIsRequiresReload(false);    
         }
     }, [isRequiresReload])
@@ -141,11 +117,8 @@ const page = () => {
                                          onDeleteActionClickedHandler={onDeleteActionClick}
                                          onAddActionClickedHandler={onAddActionClick} />
             </div>
-            <ProductFormDrawer product={product}
-                              isNew={isNew}
+            <ProductFormDrawer productId={selectedProductId}
                               isOpen={isModalOpen} 
-                              categories={categories}
-                              setProductHandler={setProduct}
                               setIsRequiresReloadHandler={setIsRequiresReload}
                               showNotificationHandler={showNotification}
                               onModalCloseHandler={onModalClose} />
