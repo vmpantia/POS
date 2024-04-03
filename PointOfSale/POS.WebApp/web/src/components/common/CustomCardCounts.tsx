@@ -1,4 +1,4 @@
-import { CustomCardCount, CustomCardCountProps } from '@/models/props/CustomCardCountProps'
+import { CustomCardCount, CustomCardCountProps } from '@/models/props/common/CustomCardCountProps'
 import React from 'react'
 
 const CustomCardCounts = ({ title, cards, isLoading }:CustomCardCountProps) => {

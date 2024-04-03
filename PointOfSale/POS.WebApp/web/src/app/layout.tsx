@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import CustomSidebar from "@/components/sidebars/CustomSidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,8 +17,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-50`}>
-        {children}
+      <body className={`${inter.className} bg-gray-50 text-zinc-800`} >
+        <CustomSidebar />
+        <div className="ml-60">
+          <div className="p-7 border-b sticky top-0 z-50 bg-white drop-shadow">
+            <span className="font-bold">Point of Sale with Inventory System</span>
+          </div>
+          <div className="p-7">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );

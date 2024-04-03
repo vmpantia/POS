@@ -7,8 +7,8 @@ import { ProductColumns } from '@/components/tables/CustomTableColumns';
 import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
 import { CommonStatus } from '@/models/enums/CommonStatus';
 import { ProductViewModel } from '@/models/interfaces/viewmodels/product/ProductViewModel'
-import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
-import { CustomCardCount } from '@/models/props/CustomCardCountProps';
+import { CustomBreadcrumbsPage } from '@/models/props/common/CustomBreadcrumbsProps';
+import { CustomCardCount } from '@/models/props/common/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
 import React, { useEffect, useState } from 'react'
 import { ConvertErrorToString } from '../../utils/ConversionHelper';
@@ -102,18 +102,16 @@ const page = () => {
 
     return (
         <>
-            <div className='p-10'>
-                <CustomBreadcrumbs pages={productPages} />
-                <CustomCardCounts title='Summary' cards={productCards} isLoading={isTableLoading} />
-                <ProductsTableWithAction title='Products'
-                                         data={products}
-                                         columns={ProductColumns}
-                                         isLoading={isTableLoading}
-                                         onEditActionClickedHandler={onEditActionClick}
-                                         onEditStatusActionClickedHandler={onEditStatusActionClick}
-                                         onDeleteActionClickedHandler={onDeleteActionClick}
-                                         onAddActionClickedHandler={onAddActionClick} />
-            </div>
+            <CustomBreadcrumbs pages={productPages} />
+            <CustomCardCounts title='Summary' cards={productCards} isLoading={isTableLoading} />
+            <ProductsTableWithAction title='Products'
+                                        data={products}
+                                        columns={ProductColumns}
+                                        isLoading={isTableLoading}
+                                        onEditActionClickedHandler={onEditActionClick}
+                                        onEditStatusActionClickedHandler={onEditStatusActionClick}
+                                        onDeleteActionClickedHandler={onDeleteActionClick}
+                                        onAddActionClickedHandler={onAddActionClick} />
             <ProductFormDrawer productId={selectedProductId}
                               isOpen={isModalOpen} 
                               setIsRequiresReloadHandler={setIsRequiresReload}

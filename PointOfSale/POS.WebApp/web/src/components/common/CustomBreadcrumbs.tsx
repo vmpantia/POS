@@ -1,4 +1,4 @@
-import { CustomBreadcrumbsProps } from '@/models/props/CustomBreadcrumbsProps';
+import { CustomBreadcrumbsProps } from '@/models/props/common/CustomBreadcrumbsProps';
 import React from 'react'
 
 const CustomBreadcrumbs = ({ pages }:CustomBreadcrumbsProps) => {

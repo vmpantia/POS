@@ -21,9 +21,22 @@ const ProductsTableWithAction = ({ title,
         },
         enableColumnPinning: true,
         enableRowActions: true,
+        muiTableBodyCellProps : {
+            style: {
+                color: 'rgb(39 39 42)'
+            }
+        },
+        muiTableHeadCellProps: {
+            style: {
+                color: 'rgb(39 39 42)'
+            }
+        },
         muiCircularProgressProps: {
             thickness: 3,
             size: 55,
+            style: {
+                color: 'rgb(39 39 42)'
+            } 
         },
         muiSkeletonProps: {
             animation: 'pulse',
