@@ -1,14 +1,11 @@
 'use client'
-import { GetAllCategoryLites } from '@/api/CategoryApis';
 import { DeleteProductById, EditProductStatusById, GetAllProducts, GetProductById } from '@/api/ProductApis';
-import CustomBreadcrumbs from '@/components/CustomBreadcrumbs';
-import CustomCardCounts from '@/components/CustomCardCounts';
+import CustomBreadcrumbs from '@/components/common/CustomBreadcrumbs';
+import CustomCardCounts from '@/components/common/CustomCardCounts';
 import useCustomNotification from '@/components/hooks/useCustomNotification';
 import { ProductColumns } from '@/components/tables/CustomTableColumns';
 import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
-import { DefaultProductViewModel } from '@/data/DefaultProductViewModel';
 import { CommonStatus } from '@/models/enums/CommonStatus';
-import { CategoryLiteViewModel } from '@/models/interfaces/viewmodels/category/CategoryLiteViewModel';
 import { ProductViewModel } from '@/models/interfaces/viewmodels/product/ProductViewModel'
 import { CustomBreadcrumbsPage } from '@/models/props/CustomBreadcrumbsProps';
 import { CustomCardCount } from '@/models/props/CustomCardCountProps';

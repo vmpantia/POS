@@ -125,7 +125,7 @@ const ProductFormDrawer = ({ productId,
                         disabled={isSubmitting} />
                     <CustomActionButton label='Cancel'
                                         type="button"
-                                        style="danger"
+                                        style="secondary"
                                         onButtonClickHandler={onModalCloseHandler}/>
                 </div>
             </form>
