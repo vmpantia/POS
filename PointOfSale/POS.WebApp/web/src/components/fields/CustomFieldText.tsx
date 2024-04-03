@@ -1,13 +1,12 @@
 import { CustomFieldTextProps } from '@/models/props/fields/CustomFieldTextProps'
 import React from 'react'
+import CustomFieldLabel from './CustomFieldLabel'
+import CustomFieldError from './CustomFieldError'
 
 const CustomFieldText = ({id, label, type, placeholder, optional, error, register}: CustomFieldTextProps) => {
     return (
         <div className='mb-5'>
-            <label id={`${id}_label`} className="block mb-2 text-sm font-medium">
-                {!optional ? <span className='text-red-500 font-bold mr-2'>*</span> : <></>}
-                {label}
-            </label>
+            <CustomFieldLabel id={id} label={label} optional={optional} />
             <input id={`${id}_input`} 
                    name={`${id}_input`} 
                    type={type} 
@@ -17,7 +16,7 @@ const CustomFieldText = ({id, label, type, placeholder, optional, error, registe
                                           'focus:ring-blue-500 focus:border-blue-500'}`}
                    placeholder={placeholder}
                    {...register} />
-            {error && <div className='mt-1 text-sm text-red-500'>{error.message}</div>}
+            {error && <CustomFieldError id={id} message={error.message}/>}
         </div>
     )
 }

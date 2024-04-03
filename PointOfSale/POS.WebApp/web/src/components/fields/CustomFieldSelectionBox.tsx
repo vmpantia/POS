@@ -1,13 +1,12 @@
 import { CustomFieldSelectionBoxProps } from '@/models/props/fields/CustomFieldSelectionBoxProps'
 import React from 'react'
+import CustomFieldLabel from './CustomFieldLabel'
+import CustomFieldError from './CustomFieldError'
 
 const CustomFieldSelectionBox = ({id, label, placeholder, optional, data, error, register}:CustomFieldSelectionBoxProps) => {
     return (
         <div className='mb-5'>
-            <label id={`${id}_label`} className="block mb-2 text-sm font-medium">
-                {!optional ? <span className='text-red-500 font-bold mr-2'>*</span> : <></>}
-                {label}
-            </label>
+            <CustomFieldLabel id={id} label={label} optional={optional} />
             <select id={`${id}_selection`} 
                     name={`${id}_selection`}
                     className={`bg-gray-50 text-sm rounded outline-none block w-full p-2.5
@@ -18,7 +17,7 @@ const CustomFieldSelectionBox = ({id, label, placeholder, optional, data, error,
                 <option key={0} value={''}>{placeholder}</option>
                 {data.map(data => <option key={data.id} value={data.id}>{data.name}</option>)}
             </select>
-            {error && <div className='mt-1 text-sm text-red-500'>{error.message}</div>}
+            {error && <CustomFieldError id={id} message={error.message}/>}
         </div>
     )
 }
