@@ -4,7 +4,7 @@ import { AddCircleOutlineOutlined, Delete, Edit, PictureAsPdfOutlined, ToggleOff
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { MRT_ActionMenuItem, MRT_ShowHideColumnsButton, MRT_ToggleFiltersButton, MRT_ToggleFullScreenButton, MRT_ToggleGlobalFilterButton, MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React, { useState } from 'react'
-import CustomConfirmationDrawer from '../drawers/CustomConfirmationDrawer';
+import CustomTableActionWithConfirmation from './CustomTableActionWithConfirmation';
 
 const CustomProductsTableWithAction = ({ title, 
                                         data,  
@@ -15,7 +15,6 @@ const CustomProductsTableWithAction = ({ title,
                                         onDeleteActionClickedHandler, 
                                         onAddActionClickedHandler }:CustomProductsTableWithActionProps) => {
     // Hooks
-    const [isConfirmationDrawerOpen, setIsConfirmationDrawerOpen] = useState<boolean>(false);
     const table = useMaterialReactTable({ 
         data: data,
         columns: columns,
@@ -85,19 +84,18 @@ const CustomProductsTableWithAction = ({ title,
                                      closeMenu(); }}
                     table={table}
             />,
-            <MRT_ActionMenuItem
+            <CustomTableActionWithConfirmation
+                key='delete'
+                id={row.original['id']}
+                label='Delete'
+                title='Confirm to delete'
+                message='Are you sure you want to delete this product?'
                 icon={<Delete />}
-                key="delete"
-                label="Delete"
-                onClick={() => { onDeleteActionClickedHandler(row.original['id']); closeMenu(); }}
-                table={table}
-            />,
+                onConfirmBtnClickHandler={onDeleteActionClickedHandler}
+                closeMenuHandler={closeMenu}
+                table={table} />
         ],
     });
-
-    // Functions 
-    const onDrawerClose = () => 
-        setIsConfirmationDrawerOpen(false);
 
     return (
         <>
@@ -105,10 +103,6 @@ const CustomProductsTableWithAction = ({ title,
                 {title}
             </div>
             <MaterialReactTable table={table}/>
-            <CustomConfirmationDrawer
-                message='Are you sure you want to delete this product?'
-                isOpen={isConfirmationDrawerOpen}
-                onCloseBtnClickHandler={onDrawerClose} />
         </>
     );
 }
