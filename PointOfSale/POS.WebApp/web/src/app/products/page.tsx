@@ -1,10 +1,9 @@
 'use client'
-import { DeleteProductById, EditProductStatusById, GetAllProducts, GetProductById } from '@/api/ProductApis';
+import { DeleteProductById, EditProductStatusById, GetAllProducts } from '@/api/ProductApis';
 import CustomBreadcrumbs from '@/components/common/CustomBreadcrumbs';
 import CustomCardCounts from '@/components/common/CustomCardCounts';
 import useCustomNotification from '@/components/hooks/useCustomNotification';
 import { ProductColumns } from '@/components/tables/CustomTableColumns';
-import ProductsTableWithAction from '@/components/tables/ProductsTableWithAction';
 import { CommonStatus } from '@/models/enums/CommonStatus';
 import { ProductViewModel } from '@/models/interfaces/viewmodels/product/ProductViewModel'
 import { CustomBreadcrumbsPage } from '@/models/props/common/CustomBreadcrumbsProps';
@@ -12,8 +11,9 @@ import { CustomCardCount } from '@/models/props/common/CustomCardCountProps';
 import { Result } from '@/models/response/Result';
 import React, { useEffect, useState } from 'react'
 import { ConvertErrorToString } from '../../utils/ConversionHelper';
-import ProductFormDrawer from '@/components/drawers/ProductFormDrawer';
 import { EditProductStatusByIdDto } from '@/models/interfaces/dtos/product/EditProductStatusByIdDto';
+import CustomProductFormDrawer from '@/components/drawers/CustomProductFormDrawer';
+import CustomProductsTableWithAction from '@/components/tables/CustomProductsTableWithAction';
 
 const page = () => {
     
@@ -22,7 +22,7 @@ const page = () => {
     const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
     const [isRequiresReload, setIsRequiresReload] = useState<boolean>(false);
     const [selectedProductId, setSelectedProductId] = useState<string | null>();
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
     const { notification, showNotification } = useCustomNotification('bottomLeft');
 
     // Component Configurations
@@ -52,7 +52,7 @@ const page = () => {
     }
     const onEditActionClick = (id:string) => {
         setSelectedProductId(id);
-        setIsModalOpen(true);
+        setIsDrawerOpen(true);
     }
     const onEditStatusActionClick = (id:string, newStatus:CommonStatus) => {
         let request:EditProductStatusByIdDto = { newStatus: newStatus }
@@ -81,11 +81,11 @@ const page = () => {
     }
     const onAddActionClick = () => {
         setSelectedProductId(null);
-        setIsModalOpen(true);
+        setIsDrawerOpen(true);
     }
-    const onModalClose = () => {
+    const onDrawerClose = () => {
         setSelectedProductId(null);
-        setIsModalOpen(false);
+        setIsDrawerOpen(false);
     }
     
     // Effects
@@ -104,19 +104,19 @@ const page = () => {
         <>
             <CustomBreadcrumbs pages={productPages} />
             <CustomCardCounts title='Summary' cards={productCards} isLoading={isTableLoading} />
-            <ProductsTableWithAction title='Products'
-                                        data={products}
-                                        columns={ProductColumns}
-                                        isLoading={isTableLoading}
-                                        onEditActionClickedHandler={onEditActionClick}
-                                        onEditStatusActionClickedHandler={onEditStatusActionClick}
-                                        onDeleteActionClickedHandler={onDeleteActionClick}
-                                        onAddActionClickedHandler={onAddActionClick} />
-            <ProductFormDrawer productId={selectedProductId}
-                              isOpen={isModalOpen} 
-                              setIsRequiresReloadHandler={setIsRequiresReload}
-                              showNotificationHandler={showNotification}
-                              onModalCloseHandler={onModalClose} />
+            <CustomProductsTableWithAction title='Products'
+                                            data={products}
+                                            columns={ProductColumns}
+                                            isLoading={isTableLoading}
+                                            onEditActionClickedHandler={onEditActionClick}
+                                            onEditStatusActionClickedHandler={onEditStatusActionClick}
+                                            onDeleteActionClickedHandler={onDeleteActionClick}
+                                            onAddActionClickedHandler={onAddActionClick} />
+            <CustomProductFormDrawer productId={selectedProductId}
+                                        isOpen={isDrawerOpen} 
+                                        setIsRequiresReloadHandler={setIsRequiresReload}
+                                        showNotificationHandler={showNotification}
+                                        onModalCloseHandler={onDrawerClose} />
             {notification}
         </>
     );

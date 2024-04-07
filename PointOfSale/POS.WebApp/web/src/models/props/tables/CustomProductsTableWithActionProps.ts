@@ -1,6 +1,6 @@
 import { CommonStatus } from "@/models/enums/CommonStatus";
 
-export interface ProductTableProps {
+export interface CustomProductsTableWithActionProps {
     title:string,
     data:any[],
     columns:any[],

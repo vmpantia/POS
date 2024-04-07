@@ -1,4 +1,4 @@
-export interface ProductFormModalProps {
+export interface CustomProductFormDrawerProps {
     productId?: string | null,
     isOpen: boolean,
     setIsRequiresReloadHandler: (value:boolean) => any,

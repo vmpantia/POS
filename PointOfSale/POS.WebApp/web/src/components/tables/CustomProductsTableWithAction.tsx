@@ -1,18 +1,21 @@
 import { CommonStatus } from '@/models/enums/CommonStatus';
-import { ProductTableProps } from '@/models/props/tables/ProductTableProps'
-import { AddCircleOutlineOutlined, Delete, Edit, PictureAsPdfOutlined, PrintOutlined, ToggleOff, ToggleOn } from '@mui/icons-material';
+import { CustomProductsTableWithActionProps } from '@/models/props/tables/CustomProductsTableWithActionProps'
+import { AddCircleOutlineOutlined, Delete, Edit, PictureAsPdfOutlined, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { MRT_ActionMenuItem, MRT_ShowHideColumnsButton, MRT_ToggleFiltersButton, MRT_ToggleFullScreenButton, MRT_ToggleGlobalFilterButton, MaterialReactTable, useMaterialReactTable } from 'material-react-table'
-import React from 'react'
+import React, { useState } from 'react'
+import CustomConfirmationDrawer from '../drawers/CustomConfirmationDrawer';
 
-const ProductsTableWithAction = ({ title, 
-                                   data,  
-                                   columns,  
-                                   isLoading, 
-                                   onEditActionClickedHandler, 
-                                   onEditStatusActionClickedHandler,
-                                   onDeleteActionClickedHandler, 
-                                   onAddActionClickedHandler }:ProductTableProps) => {
+const CustomProductsTableWithAction = ({ title, 
+                                        data,  
+                                        columns,  
+                                        isLoading, 
+                                        onEditActionClickedHandler, 
+                                        onEditStatusActionClickedHandler,
+                                        onDeleteActionClickedHandler, 
+                                        onAddActionClickedHandler }:CustomProductsTableWithActionProps) => {
+    // Hooks
+    const [isConfirmationDrawerOpen, setIsConfirmationDrawerOpen] = useState<boolean>(false);
     const table = useMaterialReactTable({ 
         data: data,
         columns: columns,
@@ -92,14 +95,22 @@ const ProductsTableWithAction = ({ title,
         ],
     });
 
+    // Functions 
+    const onDrawerClose = () => 
+        setIsConfirmationDrawerOpen(false);
+
     return (
         <>
             <div className='text-xl font-bold mb-5'>
                 {title}
             </div>
             <MaterialReactTable table={table}/>
+            <CustomConfirmationDrawer
+                message='Are you sure you want to delete this product?'
+                isOpen={isConfirmationDrawerOpen}
+                onCloseBtnClickHandler={onDrawerClose} />
         </>
     );
 }
 
-export default ProductsTableWithAction
+export default CustomProductsTableWithAction

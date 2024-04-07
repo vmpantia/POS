@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ProductFormModalProps } from '@/models/props/modals/ProductFormModalProps'
+import { CustomProductFormDrawerProps } from '@/models/props/drawers/CustomProductFormDrawerProps'
 import { Drawer } from 'antd'
 import CustomFieldText from '../fields/CustomFieldText'
 import CustomFieldTextArea from '../fields/CustomFieldTextArea'
@@ -15,11 +15,11 @@ import { EditProductByIdDto } from '@/models/interfaces/dtos/product/EditProduct
 import { AddProductDto } from '@/models/interfaces/dtos/product/AddProductDto'
 import CustomActionButton from '../actions/CustomActionButton'
 
-const ProductFormDrawer = ({ productId, 
-                            isOpen, 
-                            setIsRequiresReloadHandler, 
-                            showNotificationHandler, 
-                            onModalCloseHandler } : ProductFormModalProps) => {
+const CustomProductFormDrawer = ({ productId, 
+                                isOpen, 
+                                setIsRequiresReloadHandler, 
+                                showNotificationHandler, 
+                                onModalCloseHandler } : CustomProductFormDrawerProps) => {
                                 
     // Check if the transaction will be new or edit
     const isNew = !productId;
@@ -133,4 +133,4 @@ const ProductFormDrawer = ({ productId,
     )
 }
 
-export default ProductFormDrawer
+export default CustomProductFormDrawer
